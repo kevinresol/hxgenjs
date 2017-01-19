@@ -1,0 +1,7 @@
+tests.hxml
+-lib travix
+-lib hxgenjs
+-lib hxnodejs
+
+-js bin/node/index.js
+-dce full

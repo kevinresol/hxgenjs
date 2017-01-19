@@ -14,6 +14,8 @@ class ClassGenerator {
 		
 		if((c.constructor == null || c.constructor.code == null) && c.fields.length == 0)
 			return None;
+		if(c.type.isExtern)
+			return None;
 		
 		var filepath = c.id.asFilePath() + '.js';
 		var name = c.type.name;

@@ -8,4 +8,5 @@ typedef ProcessedClass = {
 	fields:Array<ProcessedField>,
 	constructor:ProcessedField,
 	dependencies:Array<Dependency>,
+	externType:ExternType,
 }

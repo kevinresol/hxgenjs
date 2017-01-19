@@ -2,7 +2,7 @@ Object.defineProperty(exports, "__esModule", {value: true});
 
 exports.default = function $import(obj) {
 	if(obj && obj.__esModule) {
-		return obj;
+		return obj.hasOwnProperty('default') ? obj : {default: obj};
 	} else { 
 		var newObj = {};
 		if (obj != null) {

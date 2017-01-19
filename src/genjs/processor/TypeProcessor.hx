@@ -38,8 +38,8 @@ class TypeProcessor {
 }
 
 enum FlattenedType {
-	FClass(id:String, cls:ClassType);
-	FEnum(id:String, enm:EnumType);
+	FClass(id:TypeID, cls:ClassType);
+	FEnum(id:TypeID, enm:EnumType);
 }
 
 enum ProcessResult {

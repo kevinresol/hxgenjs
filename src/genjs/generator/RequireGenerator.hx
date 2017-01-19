@@ -17,20 +17,33 @@ class RequireGenerator {
 		for(dep in dependencies) {
 			switch dep {
 				case DType(type):
-					var isExtern = false;
-					var id:TypeID = switch TypeProcessor.flatten(type) {
+					switch TypeProcessor.flatten(type) {
 						case Some(FClass(id, cls)):
-							isExtern = cls.isExtern;
-							id;
+							var cls = ClassProcessor.process(api, id, cls);
+							var varname = id.asVarSafeName();
+							switch cls.externType {
+								case None:
+									var path = api.quoteString(prefix + id.asFilePath());
+									code.push('var $varname = require($path);');
+								case Require(p):
+									var path = api.quoteString(p[0]);
+									code.push('var $varname = $$import(require($path));');
+								case Native(name):
+									var path = api.quoteString(name);
+									code.push('var $varname = $$import(require($path));');
+								case Global: // do nothing
+							}
+							varname = id.asVarSafeName();
+							
 						case Some(FEnum(id, enm)):
-							id;
+							var path = api.quoteString(prefix + id.asFilePath());
+							var varname = id.asVarSafeName();
+							code.push('var $varname = require($path);');
+							
 						default:
 							continue;
+							
 					}
-					var path = api.quoteString(prefix + id.asFilePath());
-					var require = 'require($path)';
-					if(isExtern) require = '$$import($require)';
-					code.push('var ${id.asVarSafeName()} = $require;');
 					
 				case DStub(name):
 					var path = api.quoteString(prefix + name + '_stub');

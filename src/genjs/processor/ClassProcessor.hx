@@ -4,6 +4,7 @@ import haxe.Template;
 import haxe.macro.Type;
 import haxe.macro.JSGenApi;
 import genjs.processor.Dependency;
+import genjs.processor.ExternType;
 
 using StringTools;
 using tink.MacroApi;
@@ -62,12 +63,21 @@ class ClassProcessor {
 			
 			if(cls.superClass != null) stubs.push('extend');
 			
+			var externType =
+				if(!cls.isExtern) None
+				else switch [cls.meta.extract(':jsRequire'), cls.meta.extract(':native')] {
+					case [[v], _]: Require(v.params.map(function(e) return e.getValue()));
+					case [_, [v]]: Native(v.params[0].getValue());
+					default: Global;
+				}
+			
 			cache[id] = {
 				id: id,
 				type: cls,
 				fields: fields.concat(statics),
 				constructor: constructor,
 				dependencies: stubs.map(DStub).concat(dependencies),
+				externType: externType,
 			}
 		}
 		return cache[id];

@@ -2,6 +2,7 @@ package genjs.processor;
 
 using StringTools;
 
+@:forward
 abstract TypeID(String) from String to String {
 	public inline function asFilePath() return this.replace('.', '/');
 	public inline function asTemplateHolder() return this.replace('_', '__').replace('.', '_');

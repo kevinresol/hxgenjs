@@ -61,10 +61,10 @@ class Generator {
 							case None:
 						}
 					case PEnum(e): 
-						// switch EnumGenerator.generate(api, e) {
-						// 	case Some(code): write(e.id.asFilePath() + '.js', code);
-						// 	case None:
-						// }
+						switch EnumGenerator.generate(api, e) {
+							case Some(code): write(path + e.id.asFilePath() + '.js', code);
+							case None:
+						}
 				}
 			}
 			

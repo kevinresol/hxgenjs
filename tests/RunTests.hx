@@ -15,7 +15,15 @@ class RunTests {
 		trace(Validator.isEmail('kevin'));
 		trace(Validator.isEmail('kevin@gamil.com'));
 		trace(Redux.combineReducers);
+		
+		switch enm() {
+			case A: trace('a');
+			case B: trace('b');
+		}
 	}
+	
+	static function enm()
+		return A;
 }
 
 

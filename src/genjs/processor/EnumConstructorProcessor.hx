@@ -13,9 +13,9 @@ class EnumConstructorProcessor {
 				var sargs = args.map(function(a) return a.name).join(',');
 				'$ident = function($sargs) { var $$x = ["${ctor.name}",${ctor.index},$sargs]; $$x.__enum__ = ::enumName::; $$x.toString = $$estr; return $$x; }';
 			default:
-				'$ident = [${api.quoteString(ctor.name)},${ctor.index}]\n' +
-				'$ident.toString = $$estr\n' +
-				'$ident.__enum__ = ::enumName::\n';
+				'$ident = [${api.quoteString(ctor.name)},${ctor.index}];\n' +
+				'$ident.toString = $$estr;\n' +
+				'$ident.__enum__ = ::enumName::;\n';
 		}
 		return {
 			field: ctor,

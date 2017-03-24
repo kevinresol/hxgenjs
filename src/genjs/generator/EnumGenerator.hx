@@ -32,6 +32,7 @@ class EnumGenerator {
 		var fields = [for(c in e.constructors) c.template.execute(name)];
 		
 		return Some([
+			'// Enum: ${e.id}',
 			'Object.defineProperty(exports, "__esModule", {value: true});',
 			'// Imports',
 			requireStatements,

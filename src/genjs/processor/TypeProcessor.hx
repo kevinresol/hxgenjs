@@ -10,12 +10,20 @@ using StringTools;
 using tink.MacroApi;
 
 class TypeProcessor {
+	static var cache = new Map();
+	
+	public static function get(id:String) {
+		return cache[id];
+	}
+	
 	public static function process(api:JSGenApi, type:Type) {
 		return switch flatten(type) {
 			case Some(FClass(id, cls)):
-				Some(PClass(ClassProcessor.process(api, id, cls)));
+				if(cache[id] == null) cache[id] = PClass(ClassProcessor.process(api, id, cls));
+				Some(cache[id]);
 			case Some(FEnum(id, enm)):
-				Some(PEnum(EnumProcessor.process(api, id, enm)));
+				if(cache[id] == null) cache[id] = PEnum(EnumProcessor.process(api, id, enm));
+				Some(cache[id]);
 			default:
 				None;
 		}

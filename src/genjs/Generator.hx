@@ -2,6 +2,7 @@ package genjs;
 
 import haxe.DynamicAccess;
 import haxe.macro.Compiler;
+import haxe.macro.Context;
 import genjs.processor.*;
 import genjs.generator.*;
 import sys.io.File;
@@ -15,6 +16,7 @@ class Generator {
 	public static var debug = false;
 	#if macro
 	public static function use() {
+		Context.onMacroContextReused(function() return false);
 		Compiler.setCustomJSGenerator(function(api) {
 			var path = api.outputFile.directory().addTrailingSlash();
 			var stubs = new DynamicAccess();
@@ -71,13 +73,13 @@ class Generator {
 			// generate entry point
 			switch MainGenerator.generate(api, main, data) {
 				case None:
-				case Some(code): trace(code); write(api.outputFile, code);
+				case Some(code): write(api.outputFile, code);
 			}
 			
 			// copy stubs
 			for(stub in stubs.keys()) {
 				var name = stub + '_stub.js';
-				File.copy('./stub/$name', path + name);
+				File.copy(Context.resolvePath('stub/$name'), path + name);
 			}
 		});
 	}

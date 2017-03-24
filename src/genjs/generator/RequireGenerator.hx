@@ -25,13 +25,14 @@ class RequireGenerator {
 								case None:
 									var path = api.quoteString(prefix + id.asFilePath());
 									code.push('var $varname = require($path);');
-								case Require(p):
+								case Require(p, false):
+									var path = api.quoteString(p[0]);
+									code.push('var $varname = require($path);');
+								case Require(p, true):
 									var path = api.quoteString(p[0]);
 									code.push('var $varname = $$import(require($path));');
-								case Native(name):
-									var path = api.quoteString(name);
-									code.push('var $varname = $$import(require($path));');
-								case Global: // do nothing
+								case Native(_) | CoreApi | Global: 
+									// do nothing
 							}
 							varname = id.asVarSafeName();
 							

@@ -22,11 +22,14 @@ class ClassGenerator {
 		
 		var data = {};
 		Reflect.setField(data, 'className', name);
-		Reflect.setField(data, name, name);
+		Reflect.setField(data, c.id.asTemplateHolder(), name);
 		for(dependency in c.dependencies) switch dependency {
-			case DType(type): 
-				var id:TypeID = type.getID();
-				Reflect.setField(data, id.asTemplateHolder(), id.asVarSafeName() + '.default');
+			case DType(TypeProcessor.process(api, _) => Some(PClass(c))):
+				Reflect.setField(data, c.id.asTemplateHolder(), c.id.asAccessName(c.externType));
+			
+			case DType(TypeProcessor.process(api, _) => Some(PEnum(e))): 
+				Reflect.setField(data, e.id.asTemplateHolder(), e.id.asAccessName());
+				
 			default:
 		}
 		var requireStatements = RequireGenerator.generate(api, filepath.directory(), c.dependencies);
@@ -39,11 +42,12 @@ class ClassGenerator {
 		
 		// Fields
 		var fields = [];
-		for(field in c.fields.filter(function(f) return !f.isStatic))
+		for(field in c.fields.filter(function(f) return !f.isStatic)) {
 			switch FieldGenerator.generate(api, field, data) {
 				case Some(v): fields.push(v);
 				case None:
 			}
+		}
 		var fields = '{\n' + fields.join(',\n').indent(1) + '\n}';
 		
 		// Statics
@@ -54,7 +58,7 @@ class ClassGenerator {
 				case None:
 			}
 		}
-		var statics = statics.join(';\n');
+		var statics = statics.join('\n');
 		
 		// Meta
 		var meta = ['$name.__name__ = true;'];
@@ -65,8 +69,12 @@ class ClassGenerator {
 				var sc = ClassProcessor.process(api, sc.toString(), sc.get());
 				var scname = sc.id.asVarSafeName();
 				meta.push('$name.__super__ = $scname;');
-				meta.push('$name.prototype = $$extend($scname.prototype, $fields);');
+				meta.push('$name.prototype = $$extend(${sc.id.asAccessName(sc.externType)}.prototype, $fields);');
 		}
+		
+		var init = 
+			if(c.init != null) c.init.template.execute(data) + ';';
+			else '';
 		
 		
 		// var code = '';
@@ -77,13 +85,16 @@ class ClassGenerator {
 		// 	trace(code);
 		// }
 		return Some([
+			'// Class: ${c.id}',
 			'Object.defineProperty(exports, "__esModule", {value: true});',
+			'var __map_reserved = {};', // TODO: add only if needed
 			'// Imports',
 			requireStatements,
 			'// Definition',
 			ctor,
 			meta.join('\n'),
 			statics,
+			init,
 			'exports.default = $name;',
 		].join('\n\n'));
 	}

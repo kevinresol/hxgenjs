@@ -19,6 +19,14 @@ class ClassProcessor {
 			var stubs = [];
 			var dependencies = [];
 			
+			// add superclass to dependency list
+			switch cls.superClass {
+				case null: // do nothing;
+				case {t: type}:
+					ids.push(type.toString());
+					dependencies.push(DType(TInst(type, [])));
+			}
+			
 			function checkStubDependency(name:String, code:String) {
 				if(stubs.indexOf(name) != -1) return;
 				if(code.indexOf('$$$name') != -1) stubs.push(name);
@@ -39,7 +47,7 @@ class ClassProcessor {
 				var code = switch f.expr() {
 					case null: null;
 					case e: 
-						var code = api.generateStatement(e);
+						var code = api.generateValue(e);
 						checkStubDependency('iterator', code);
 						checkStubDependency('bind', code);
 						checkStubDependency('extend', code);
@@ -60,14 +68,29 @@ class ClassProcessor {
 				case null: null;
 				case ctor: constructField(ctor.get(), false);
 			}
+			var init = switch cls.init {
+				case null: null;
+				case expr:
+					var code = api.generateStatement(expr);
+					checkStubDependency('iterator', code);
+					checkStubDependency('bind', code);
+					checkStubDependency('extend', code);
+					{
+						code: code,
+						template: code == null ? null : new Template(code),
+					}
+			}
 			
 			if(cls.superClass != null) stubs.push('extend');
 			
+			
+			inline function m(name) return cls.meta.extract(name);
 			var externType =
 				if(!cls.isExtern) None
-				else switch [cls.meta.extract(':jsRequire'), cls.meta.extract(':native')] {
-					case [[v], _]: Require(v.params.map(function(e) return e.getValue()));
-					case [_, [v]]: Native(v.params[0].getValue());
+				else switch [m(':jsRequire'), m(':jsRequireDefault'), m(':native'), m(':coreApi')] {
+					case [[v], isDefault, _, _]: Require(v.params.map(function(e) return e.getValue()), isDefault.length > 0);
+					case [_, _, [v], _]: Native(v.params[0].getValue());
+					case [_, _, _, [v]]: CoreApi;
 					default: Global;
 				}
 			
@@ -75,6 +98,7 @@ class ClassProcessor {
 				id: id,
 				type: cls,
 				fields: fields.concat(statics),
+				init: init,
 				constructor: constructor,
 				dependencies: stubs.map(DStub).concat(dependencies),
 				externType: externType,

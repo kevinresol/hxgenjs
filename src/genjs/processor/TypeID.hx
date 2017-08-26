@@ -18,7 +18,7 @@ abstract TypeID(String) from String to String {
 			case Require([_], false):
 				'(' + asVarSafeName() + '()' + ')';
 			case Require(fields, isDefault) if(fields.length > 1):
-				'(' + asVarSafeName() + '()' + '.' + fields.slice(1).join('.') + (isDefault ? '.default' : '') + ')';
+				'(' + asVarSafeName() + '()' + (isDefault ? '.default' : '') + '.' + fields.slice(1).join('.') + ')';
 			default:
 				asVarSafeName();
 		}

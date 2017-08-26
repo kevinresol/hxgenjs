@@ -1,6 +1,7 @@
 {
 	"name": "hxgenjs",
 	"license": "MIT",
+	"url": "https://github.com/kevinresol/hxgenjs",
 	"tags": [
 		"js",
 		"generator"

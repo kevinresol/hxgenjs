@@ -9,8 +9,8 @@
 	"contributors": [
 		"kevinresol"
 	],
-	"releasenote": "Fix global and __init__",
-	"version": "0.1.3",
+	"releasenote": "Static functions should come before static variables",
+	"version": "0.1.4",
 	"url": "https://github.com/kevinresol/hxgenjs",
 	"dependencies": {
 		"tink_macro": ""

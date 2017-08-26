@@ -93,8 +93,8 @@ class ClassGenerator {
 			'// Definition',
 			ctor,
 			meta.join('\n'),
-			statics,
 			init,
+			statics,
 			'exports.default = $name;',
 		].join('\n\n'));
 	}

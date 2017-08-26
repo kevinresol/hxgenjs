@@ -1,17 +1,17 @@
 {
-  "name": "hxgenjs",
-  "license": "MIT",
-  "tags": [
-    "js",
-    "generator"
-  ],
-  "classPath": "src",
-  "contributors": [
-    "kevinresol"
-  ],
-  "releasenote": "initial release",
-  "version": "0.0.0",
-  "dependencies": {
-    "tink_macro": ""
-  }
+	"name": "hxgenjs",
+	"license": "MIT",
+	"tags": [
+		"js",
+		"generator"
+	],
+	"classPath": "src",
+	"contributors": [
+		"kevinresol"
+	],
+	"releasenote": "Experiemental release",
+	"version": "0.1.0",
+	"dependencies": {
+		"tink_macro": ""
+	}
 }

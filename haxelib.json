@@ -9,8 +9,8 @@
 	"contributors": [
 		"kevinresol"
 	],
-	"releasenote": "Static functions should come before static variables",
-	"version": "0.1.4",
+	"releasenote": "Workaround the path not found issue",
+	"version": "0.1.5",
 	"url": "https://github.com/kevinresol/hxgenjs",
 	"dependencies": {
 		"tink_macro": ""

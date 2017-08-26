@@ -17,6 +17,11 @@ class Generator {
 	#if macro
 	public static function use() {
 		Context.onMacroContextReused(function() return false);
+		
+		// WORKAROUND: https://github.com/HaxeFoundation/haxe/issues/6539
+		var folder = Compiler.getOutput().directory();
+		if(!FileSystem.exists(folder)) FileSystem.createDirectory(folder);
+		
 		Compiler.setCustomJSGenerator(function(api) {
 			var path = api.outputFile.directory().addTrailingSlash();
 			var stubs = new DynamicAccess();

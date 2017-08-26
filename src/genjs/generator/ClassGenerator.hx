@@ -51,14 +51,15 @@ class ClassGenerator {
 		var fields = '{\n' + fields.join(',\n').indent(1) + '\n}';
 		
 		// Statics
-		var statics = [];
+		var staticFunctions = [];
+		var staticVariables = [];
 		for(field in c.fields.filter(function(f) return f.isStatic)) {
 			switch FieldGenerator.generate(api, field, data) {
-				case Some(v): statics.push(v);
+				case Some(v): (field.isFunction ? staticFunctions : staticVariables).push(v);
 				case None:
 			}
 		}
-		var statics = statics.join('\n');
+		var statics = staticFunctions.join('\n') + '\n' + staticVariables.join('\n');
 		
 		// Meta
 		var meta = ['$name.__name__ = true;'];

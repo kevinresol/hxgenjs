@@ -8,4 +8,5 @@ typedef ProcessedField = {
 	code:String,
 	template:Template,
 	isStatic:Bool,
+	isFunction:Bool,
 }

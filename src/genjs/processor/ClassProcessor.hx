@@ -57,6 +57,7 @@ class ClassProcessor {
 				return {
 					field: f,
 					isStatic: isStatic,
+					isFunction: f.kind.match(FMethod(_)),
 					code: code,
 					template: code == null ? null : new Template(code),
 				}

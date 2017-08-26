@@ -9,8 +9,8 @@
 	"contributors": [
 		"kevinresol"
 	],
-	"releasenote": "Fix entry point",
-	"version": "0.1.2",
+	"releasenote": "Fix global and __init__",
+	"version": "0.1.3",
 	"url": "https://github.com/kevinresol/hxgenjs",
 	"dependencies": {
 		"tink_macro": ""

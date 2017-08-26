@@ -13,5 +13,6 @@ Simply install the library and add `-lib hxgenjs` to your project.
 ## Work in progress
 
 
-- [x] Generate per-haxe-class javascript files
+- [x] Generate javascript file per Haxe class
+- [x] Handle @:expose
 - [ ] Standardize way to configure the generator

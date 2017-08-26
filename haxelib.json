@@ -1,7 +1,6 @@
 {
 	"name": "hxgenjs",
 	"license": "MIT",
-	"url": "https://github.com/kevinresol/hxgenjs",
 	"tags": [
 		"js",
 		"generator"
@@ -10,8 +9,9 @@
 	"contributors": [
 		"kevinresol"
 	],
-	"releasenote": "Experiemental release",
-	"version": "0.1.0",
+	"releasenote": "Experimental release",
+	"version": "0.1.1",
+	"url": "https://github.com/kevinresol/hxgenjs",
 	"dependencies": {
 		"tink_macro": ""
 	}

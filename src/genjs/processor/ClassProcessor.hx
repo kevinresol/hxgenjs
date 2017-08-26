@@ -1,5 +1,6 @@
 package genjs.processor;
 
+import haxe.ds.Option;
 import haxe.Template;
 import haxe.macro.Type;
 import haxe.macro.JSGenApi;
@@ -104,6 +105,12 @@ class ClassProcessor {
 					default: Global;
 				}
 			
+			var meta = m(':expose');
+			var expose =
+				if(meta.length == 0) Option.None
+				else if(meta[0].params.length == 0) Some(id)
+				else Some(meta[0].params[0].getValue());
+			
 			cache[id] = {
 				id: id,
 				type: cls,
@@ -112,6 +119,7 @@ class ClassProcessor {
 				constructor: constructor,
 				dependencies: stubs.map(DStub).concat(dependencies),
 				externType: externType,
+				expose: expose,
 			}
 		}
 		return cache[id];

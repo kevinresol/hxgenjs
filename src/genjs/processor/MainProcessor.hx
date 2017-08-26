@@ -4,24 +4,24 @@ import haxe.Template;
 import haxe.macro.Type;
 import haxe.macro.JSGenApi;
 import genjs.processor.Dependency;
+import genjs.processor.TypeProcessor;
 
 using StringTools;
 using tink.MacroApi;
+using Lambda;
 
 class MainProcessor {
 	
-	public static function process(api:JSGenApi):ProcessedMain {
+	public static function process(api:JSGenApi, allTypes:Array<ProcessResult>):ProcessedMain {
 		var ids = [];
 		var stubs = [];
-		var dependencies = [];
+		var dependencies = new Map();
+		var exposes = new Map();
 		
 		api.setTypeAccessor(function(type) {
 			if(stubs.indexOf('import') == -1) stubs.push('import');
 			var id:TypeID = type.getID();
-			if(ids.indexOf(id) == -1) {
-				ids.push(id);
-				dependencies.push(DType(type));
-			}
+			dependencies.set(id, DType(type));
 			return '::' + id.asTemplateHolder() + '::';
 		});
 		
@@ -40,10 +40,25 @@ class MainProcessor {
 				code;
 		}
 		
+		for(type in allTypes) {
+			switch type {
+				case PClass(c):
+					switch c.expose {
+						case Some(name):
+							exposes.set(name, c.id);
+							if(!dependencies.exists(c.id))
+								dependencies.set(c.id, DType(api.types.find(function(t) return t.getID() == c.id)));
+						default:
+					}
+				default:
+			}
+		}
+		
 		return {
 			code: code,
 			template: code == null ? null : new Template(code),
-			dependencies: stubs.map(DStub).concat(dependencies),
+			dependencies: stubs.map(DStub).concat([for(d in dependencies) d]),
+			exposes: exposes,
 		}
 	}
 }

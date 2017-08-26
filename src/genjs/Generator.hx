@@ -46,7 +46,7 @@ class Generator {
 			}
 			
 			// process entry point
-			var main = MainProcessor.process(api);
+			var main = MainProcessor.process(api, types);
 			for(d in main.dependencies) switch d {
 				case DType(t): typeIds.set(t.getID(), true);
 				default:

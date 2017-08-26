@@ -1,5 +1,6 @@
 package genjs.processor;
 
+import haxe.ds.Option;
 import haxe.macro.Type;
 
 typedef ProcessedClass = {
@@ -10,4 +11,5 @@ typedef ProcessedClass = {
 	init:{code:String, template:haxe.Template},
 	dependencies:Array<Dependency>,
 	externType:ExternType,
+	expose:Option<String>,
 }

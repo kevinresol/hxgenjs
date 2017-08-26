@@ -33,7 +33,8 @@ class EnumGenerator {
 		
 		return Some([
 			'// Enum: ${e.id}',
-			'Object.defineProperty(exports, "__esModule", {value: true});',
+			'var $$global = typeof window != "undefined" ? window : typeof global != "undefined" ? global : typeof self != "undefined" ? self : this',
+			'$$global.Object.defineProperty(exports, "__esModule", {value: true});',
 			'// Imports',
 			requireStatements,
 			'// Definition',

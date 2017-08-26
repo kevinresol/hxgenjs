@@ -72,6 +72,7 @@ class ClassGenerator {
 				meta.push('$name.prototype = $$extend(${sc.id.asAccessName(sc.externType)}.prototype, $fields);');
 		}
 		
+		// __init__
 		var init = 
 			if(c.init != null) c.init.template.execute(data) + ';';
 			else '';
@@ -86,7 +87,8 @@ class ClassGenerator {
 		// }
 		return Some([
 			'// Class: ${c.id}',
-			'Object.defineProperty(exports, "__esModule", {value: true});',
+			'var $$global = typeof window != "undefined" ? window : typeof global != "undefined" ? global : typeof self != "undefined" ? self : this',
+			'$$global.Object.defineProperty(exports, "__esModule", {value: true});',
 			'var __map_reserved = {};', // TODO: add only if needed
 			'// Imports',
 			requireStatements,

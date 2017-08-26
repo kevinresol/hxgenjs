@@ -9,8 +9,8 @@
 	"contributors": [
 		"kevinresol"
 	],
-	"releasenote": "Workaround the path not found issue",
-	"version": "0.1.5",
+	"releasenote": "Handle @:expose",
+	"version": "0.2.0",
 	"url": "https://github.com/kevinresol/hxgenjs",
 	"dependencies": {
 		"tink_macro": ""

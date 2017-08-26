@@ -25,17 +25,17 @@ class RequireGenerator {
 							switch cls.externType {
 								case None:
 									var path = api.quoteString(prefix + id.asFilePath());
-									code.push('var $varname = require($path);');
+									code.push('function $varname() {return require($path);}');
 								case Require(p, false):
 									var path = p[0];
 									if(path.startsWith('.')) path = prefix + path;
 									path = api.quoteString(path);
-									code.push('var $varname = require($path);');
+									code.push('function $varname() {return require($path);}');
 								case Require(p, true):
 									var path = p[0];
 									if(path.startsWith('.')) path = prefix + path;
 									path = api.quoteString(path);
-									code.push('var $varname = $$import(require($path));');
+									code.push('function $varname() {return $$import(require($path));}');
 								case Native(_) | CoreApi | Global: 
 									// do nothing
 							}
@@ -44,7 +44,7 @@ class RequireGenerator {
 						case Some(FEnum(id, enm)):
 							var path = api.quoteString(prefix + id.asFilePath());
 							var varname = id.asVarSafeName();
-							code.push('var $varname = require($path);');
+							code.push('function $varname() {return require($path);}');
 							
 						default:
 							continue;

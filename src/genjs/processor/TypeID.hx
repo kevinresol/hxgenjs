@@ -14,9 +14,11 @@ abstract TypeID(String) from String to String {
 	public inline function asAccessName(?externType:ExternType)
 		return switch externType {
 			case null | None | Require([_], true):
-				asVarSafeName() + '.default';
+				'(' + asVarSafeName() + '()' + '.default' + ')';
+			case Require([_], false):
+				'(' + asVarSafeName() + '()' + ')';
 			case Require(fields, isDefault) if(fields.length > 1):
-				asVarSafeName() + '.' + fields.slice(1).join('.') + (isDefault ? '.default' : '');
+				'(' + asVarSafeName() + '()' + '.' + fields.slice(1).join('.') + (isDefault ? '.default' : '') + ')';
 			default:
 				asVarSafeName();
 		}

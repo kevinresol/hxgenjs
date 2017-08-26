@@ -50,7 +50,7 @@ class Generator {
 			// prepare type accessors
 			for(typeId in typeIds.keys()) {
 				var id:TypeID = typeId;
-				Reflect.setField(data, id.asTemplateHolder(), id.asVarSafeName() + '.default');
+				Reflect.setField(data, id.asTemplateHolder(), id.asAccessName());
 			}
 			
 			// generate types

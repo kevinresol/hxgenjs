@@ -87,10 +87,19 @@ class ClassProcessor {
 			inline function m(name) return cls.meta.extract(name);
 			var externType =
 				if(!cls.isExtern) None
-				else switch [m(':jsRequire'), m(':jsRequireDefault'), m(':native'), m(':coreApi')] {
-					case [[v], isDefault, _, _]: Require(v.params.map(function(e) return e.getValue()), isDefault.length > 0);
-					case [_, _, [v], _]: Native(v.params[0].getValue());
-					case [_, _, _, [v]]: CoreApi;
+				else switch [m(':jsRequire'), m(':native'), m(':coreApi')] {
+					case [[v], _, _]: 
+						var params:Array<String> = v.params.map(function(e) return e.getValue());
+						var isDefault = false;
+						if(params[1] != null && params[1].startsWith('default')) {
+							isDefault = true;
+							params[1] = params[1].substr('default'.length);
+							if(params[1].startsWith('.')) params[1] = params[1].substr(1);
+							if(params[1] == '') params.splice(1, 1);
+						}
+						Require(params, isDefault);
+					case [_, [v], _]: Native(v.params[0].getValue());
+					case [_, _, [v]]: CoreApi;
 					default: Global;
 				}
 			

@@ -6,6 +6,7 @@ import genjs.processor.*;
 
 using haxe.io.Path;
 using tink.MacroApi;
+using StringTools;
 
 class RequireGenerator {
 	public static function generate(api:JSGenApi, currentPath:String, dependencies:Array<Dependency>) {
@@ -26,10 +27,14 @@ class RequireGenerator {
 									var path = api.quoteString(prefix + id.asFilePath());
 									code.push('var $varname = require($path);');
 								case Require(p, false):
-									var path = api.quoteString(p[0]);
+									var path = p[0];
+									if(path.startsWith('.')) path = prefix + path;
+									path = api.quoteString(path);
 									code.push('var $varname = require($path);');
 								case Require(p, true):
-									var path = api.quoteString(p[0]);
+									var path = p[0];
+									if(path.startsWith('.')) path = prefix + path;
+									path = api.quoteString(path);
 									code.push('var $varname = $$import(require($path));');
 								case Native(_) | CoreApi | Global: 
 									// do nothing

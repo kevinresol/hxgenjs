@@ -9,8 +9,8 @@
 	"contributors": [
 		"kevinresol"
 	],
-	"releasenote": "Handle @:expose",
-	"version": "0.2.0",
+	"releasenote": "Expose static fields",
+	"version": "0.2.1",
 	"url": "https://github.com/kevinresol/hxgenjs",
 	"dependencies": {
 		"tink_macro": ""

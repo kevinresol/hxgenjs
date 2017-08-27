@@ -13,7 +13,7 @@ using tink.MacroApi;
 class ClassProcessor {
 	static var cache = new Map();
 	
-	public static function process(api:JSGenApi, id:String, cls:ClassType):ProcessedClass {
+	public static function process(api:JSGenApi, id:String, cls:ClassType, ?ref:Type):ProcessedClass {
 		if(!cache.exists(id)) {
 			
 			var ids = [id];
@@ -55,10 +55,17 @@ class ClassProcessor {
 						code;
 				}
 				
+				var meta = f.meta.extract(':expose');
+				var expose =
+					if(!isStatic || meta.length == 0) Option.None
+					else if(meta[0].params.length == 0) Some('$id.${f.name}');
+					else Some(meta[0].params[0].getValue());
+				
 				return {
 					field: f,
 					isStatic: isStatic,
 					isFunction: f.kind.match(FMethod(_)),
+					expose: expose,
 					code: code,
 					template: code == null ? null : new Template(code),
 				}
@@ -111,9 +118,12 @@ class ClassProcessor {
 				else if(meta[0].params.length == 0) Some(id)
 				else Some(meta[0].params[0].getValue());
 			
+			
+			if(ref == null) throw 'Type reference cannot be null when a class is processed for the first time';
 			cache[id] = {
 				id: id,
 				type: cls,
+				ref: ref,
 				fields: fields.concat(statics),
 				init: init,
 				constructor: constructor,

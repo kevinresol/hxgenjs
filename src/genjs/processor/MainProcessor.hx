@@ -5,6 +5,7 @@ import haxe.macro.Type;
 import haxe.macro.JSGenApi;
 import genjs.processor.Dependency;
 import genjs.processor.TypeProcessor;
+import genjs.processor.Expose;
 
 using StringTools;
 using tink.MacroApi;
@@ -42,14 +43,25 @@ class MainProcessor {
 		
 		for(type in allTypes) {
 			switch type {
-				case PClass(c):
-					switch c.expose {
+				case PClass(cls):
+					// expose class
+					switch cls.expose {
 						case Some(name):
-							exposes.set(name, c.id);
-							if(!dependencies.exists(c.id))
-								dependencies.set(c.id, DType(api.types.find(function(t) return t.getID() == c.id)));
+							exposes.set(name, EClass(cls));
+							dependencies.set(cls.id, DType(cls.ref));
 						default:
 					}
+					
+					// expose static fields
+					for(field in cls.fields) {
+						switch field.expose {
+							case Some(name):
+								exposes.set(name, EClassField(cls, field));
+								dependencies.set(cls.id, DType(cls.ref));
+							default:
+						}
+					}
+					
 				default:
 			}
 		}

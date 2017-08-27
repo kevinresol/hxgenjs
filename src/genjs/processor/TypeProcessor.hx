@@ -19,10 +19,10 @@ class TypeProcessor {
 	public static function process(api:JSGenApi, type:Type) {
 		return switch flatten(type) {
 			case Some(FClass(id, cls)):
-				if(cache[id] == null) cache[id] = PClass(ClassProcessor.process(api, id, cls));
+				if(cache[id] == null) cache[id] = PClass(ClassProcessor.process(api, id, cls, type));
 				Some(cache[id]);
 			case Some(FEnum(id, enm)):
-				if(cache[id] == null) cache[id] = PEnum(EnumProcessor.process(api, id, enm));
+				if(cache[id] == null) cache[id] = PEnum(EnumProcessor.process(api, id, enm, type));
 				Some(cache[id]);
 			default:
 				None;

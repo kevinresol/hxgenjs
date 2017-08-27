@@ -11,11 +11,13 @@ using tink.MacroApi;
 class EnumProcessor {
 	static var cache = new Map();
 	
-	public static function process(api:JSGenApi, id:String, enm:EnumType) {
+	public static function process(api:JSGenApi, id:String, enm:EnumType, ?ref:Type) {
 		if(!cache.exists(id)) {
+			if(ref == null) throw 'Type reference cannot be null when a class is processed for the first time';
 			cache[id] = {
 				id: id,
 				type: enm,
+				ref: ref,
 				constructors: [for(ctor in enm.constructs) EnumConstructorProcessor.process(api, ctor)],
 				dependencies: [DStub('estr')],
 			}

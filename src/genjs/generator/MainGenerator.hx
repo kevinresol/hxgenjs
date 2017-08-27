@@ -18,14 +18,19 @@ class MainGenerator {
 					var path = name.split('.');
 					
 					var current = [];
+					var access = switch m.exposes[name] {
+						case EClass(cls): cls.id.asAccessName();
+						case EClassField(cls, field): cls.id.asAccessName() + '.' + field.field.name;
+					}
+					
 					for(i in 0...path.length) {
 						current.push('["${path[i]}"]');
-						var access = 'exports' + current.join('');
+						var export = 'exports' + current.join('');
 						
 						if(i == path.length - 1)
-							exposes.push('$access = ' + m.exposes[name].asAccessName());
+							exposes.push('$export = $access');
 						else
-							exposes.push('$access = $access || {}');
+							exposes.push('$export = $export || {}');
 					}
 				}
 				

@@ -6,6 +6,7 @@ import haxe.macro.Type;
 typedef ProcessedClass = {
 	id:TypeID,
 	type:ClassType,
+	ref:Type,
 	fields:Array<ProcessedField>,
 	constructor:ProcessedField,
 	init:{code:String, template:haxe.Template},

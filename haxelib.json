@@ -9,8 +9,8 @@
 	"contributors": [
 		"kevinresol"
 	],
-	"releasenote": "Expose static fields",
-	"version": "0.2.1",
+	"releasenote": "Fix Type.resolveClass (Closes #2)",
+	"version": "0.2.2",
 	"url": "https://github.com/kevinresol/hxgenjs",
 	"dependencies": {
 		"tink_macro": ""

@@ -62,7 +62,7 @@ class ClassGenerator {
 		var statics = staticFunctions.join('\n') + '\n' + staticVariables.join('\n');
 		
 		// Meta
-		var meta = ['$name.__name__ = true;'];
+		var meta = ['$name.__name__ = [${c.type.pack.concat([c.type.name]).map(function(v) return '"$v"').join(',')}];'];
 		switch c.type.superClass {
 			case null:
 				meta.push('$name.prototype = $fields;');
@@ -72,6 +72,7 @@ class ClassGenerator {
 				meta.push('$name.__super__ = $scname;');
 				meta.push('$name.prototype = $$extend(${sc.id.asAccessName(sc.externType)}.prototype, $fields);');
 		}
+		meta.push('$name.prototype.__class__ = $name;');
 		
 		// __init__
 		var init = 

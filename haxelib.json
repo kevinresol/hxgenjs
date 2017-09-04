@@ -9,8 +9,8 @@
 	"contributors": [
 		"kevinresol"
 	],
-	"releasenote": "Fix Type.resolveClass (Closes #2)",
-	"version": "0.2.2",
+	"releasenote": "Handle Type.resolveEnum and Type.getEnumName",
+	"version": "0.2.3",
 	"url": "https://github.com/kevinresol/hxgenjs",
 	"dependencies": {
 		"tink_macro": ""

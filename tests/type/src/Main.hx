@@ -14,9 +14,15 @@ class Main {
 	
 	function new() {}
 	
-	public function test() {
+	public function getClassName() {
 		asserts.assert(Type.getClassName(Type.getClass(this)) == 'Main');
 		asserts.assert(Type.getClassName(Type.getClass(new foo.Foo())) == 'foo.Foo');
+		return asserts.done();
+	}
+	
+	public function resolveClass() {
+		asserts.assert(Type.resolveClass('Main') == Main);
+		asserts.assert(Type.resolveClass('foo.Foo') == foo.Foo);
 		return asserts.done();
 	}
 }

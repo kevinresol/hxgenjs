@@ -17,7 +17,7 @@ class ClassProcessor {
 		if(!cache.exists(id)) {
 			
 			var ids = [id];
-			var stubs = [];
+			var stubs = ['hxClasses'];
 			var dependencies = [];
 			
 			// add superclass to dependency list

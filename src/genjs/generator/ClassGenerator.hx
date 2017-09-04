@@ -13,7 +13,7 @@ class ClassGenerator {
 	public static function generate(api:JSGenApi, c:ProcessedClass) {
 		
 		if((c.constructor == null || c.constructor.code == null) && c.fields.length == 0)
-			return None;
+			return c.id == 'Std' ? Some('Object.defineProperty(exports, "__esModule", {value: true}); exports.default = {};') : None;
 		if(c.type.isExtern)
 			return None;
 		
@@ -32,8 +32,17 @@ class ClassGenerator {
 				
 			default:
 		}
-		var requireStatements = RequireGenerator.generate(api, filepath.directory(), c.dependencies);
+		// HACK: Runtime type values from Std
+		Reflect.setField(data, 'Date', '$$hxClasses["Date"]');
+		Reflect.setField(data, 'Int', '$$hxClasses["Int"]');
+		Reflect.setField(data, 'Dynamic', '$$hxClasses["Dynamic"]');
+		Reflect.setField(data, 'Float', '$$hxClasses["Float"]');
+		Reflect.setField(data, 'Bool', '$$hxClasses["Bool"]');
+		Reflect.setField(data, 'Class', '$$hxClasses["Class"]');
+		Reflect.setField(data, 'Enum', '$$hxClasses["Enum"]');
+		Reflect.setField(data, 'Void', '$$hxClasses["Void"]');
 		
+		var requireStatements = RequireGenerator.generate(api, filepath.directory(), c.dependencies);
 		
 		var ctor = 'var $name = ' + switch c.constructor {
 			case null | {template: null}: 'function(){}';
@@ -95,11 +104,15 @@ class ClassGenerator {
 			'var __map_reserved = {};', // TODO: add only if needed
 			'// Imports',
 			requireStatements,
-			'// Definition',
+			'// Constructor',
 			ctor,
+			'// Meta',
 			meta.join('\n'),
+			'// Init',
 			init,
+			'// Statics',
 			statics,
+			'// Export',
 			'exports.default = $name;',
 		].join('\n\n'));
 	}

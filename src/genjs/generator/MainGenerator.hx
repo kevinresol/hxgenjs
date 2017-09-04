@@ -4,6 +4,10 @@ import haxe.ds.Option;
 import haxe.macro.JSGenApi;
 import genjs.processor.*;
 
+using tink.MacroApi;
+
+using Lambda;
+
 class MainGenerator {
 	public static function generate(api:JSGenApi, m:ProcessedMain, data:Dynamic) {
 		
@@ -33,8 +37,9 @@ class MainGenerator {
 							exposes.push('$export = $export || {}');
 					}
 				}
-				
+				// for(t in api.types) trace(t.getID());
 				Some([
+					'require("./Std")', // make sure those global stuff are initialized
 					requireStatements,
 					main,
 					exposes.join('\n'),

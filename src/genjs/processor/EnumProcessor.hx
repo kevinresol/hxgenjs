@@ -19,7 +19,7 @@ class EnumProcessor {
 				type: enm,
 				ref: ref,
 				constructors: [for(ctor in enm.constructs) EnumConstructorProcessor.process(api, ctor)],
-				dependencies: [DStub('estr')],
+				dependencies: [DStub('estr'), DStub('hxClasses')],
 			}
 		}
 		return cache[id];

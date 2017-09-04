@@ -62,9 +62,8 @@ class ClassGenerator {
 		var statics = staticFunctions.join('\n') + '\n' + staticVariables.join('\n');
 		
 		// Meta
-		var fqcp = c.type.pack.concat([c.type.name]);
-		var fqcn = fqcp.join('.');
-		var meta = ['$name.__name__ = [${[for(v in fqcp) '"$v"'].join(',')}];'];
+		var cname = c.id.split('.').map(api.quoteString).join(',');
+		var meta = ['$name.__name__ = [$cname];'];
 		switch c.type.superClass {
 			case null:
 				meta.push('$name.prototype = $fields;');
@@ -74,7 +73,7 @@ class ClassGenerator {
 				meta.push('$name.__super__ = $scname;');
 				meta.push('$name.prototype = $$extend(${sc.id.asAccessName(sc.externType)}.prototype, $fields);');
 		}
-		meta.push('$name.prototype.__class__ = $$hxClasses["$fqcn"] = $name;');
+		meta.push('$name.prototype.__class__ = $$hxClasses["${c.id}"] = $name;');
 		
 		// __init__
 		var init = 

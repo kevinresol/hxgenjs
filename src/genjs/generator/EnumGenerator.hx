@@ -28,7 +28,7 @@ class EnumGenerator {
 		
 		var ename = e.id.split('.').map(api.quoteString).join(',');
 		var constructs = e.type.names.map(api.quoteString).join(',');
-		var ctor = 'var $name = { __ename__: [$ename], __constructs__: [$constructs] }';
+		var ctor = 'var $name = $$hxClasses["${e.id}"] = { __ename__: [$ename], __constructs__: [$constructs] }';
 		var fields = [for(c in e.constructors) c.template.execute(name)];
 		
 		return Some([

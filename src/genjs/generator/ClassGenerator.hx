@@ -106,13 +106,29 @@ class ClassGenerator {
 		#end
 		// Fields
 		#if (js_es >= 6) 
-			ctor += [for (f in c.fields) if (!f.isStatic && f.template != null)
-				switch f.template.execute(data) {
-					case method if (method.startsWith('function(')):
-						f.field.name + method.substr('function'.length);
-					case v: v;
-				}
+			var statics = [];
+			ctor += [for (f in c.fields) 
+				if (f.template != null)
+					switch f.template.execute(data) {
+						case method if (method.startsWith('function(')):
+							(if (f.isStatic) 'static ' else '') 
+							+ f.field.name 
+							+ method.substr('function'.length);
+						case v:
+							if (f.isStatic) {
+								var name = f.field.name;
+								statics.push('var $name = $v;');
+								[
+									'static get $name() { return $name; }',
+									'static set $name(value) { $name = value; }',
+								].join('\n');
+							} 
+							else f.field.pos.error('field impossible to generate on ES6');
+							//c.type.pos.warning(v);
+							//v;
+					}
 			].join('\n').indent(1) + '\n}\n';
+			var statics = statics.join('\n');
 		#else 
 			var fields = [];
 			for(field in c.fields.filter(function(f) return !f.isStatic)) {
@@ -122,18 +138,18 @@ class ClassGenerator {
 				}
 			}		
 			var fields = '{\n' + fields.join(',\n').indent(1) + '\n}';
-		#end
-		// Statics
-		var staticFunctions = [];
-		var staticVariables = [];
-		for(field in c.fields.filter(function(f) return f.isStatic)) {
-			switch FieldGenerator.generate(api, field, data) {
-				case Some(v): (field.isFunction ? staticFunctions : staticVariables).push(v);
-				case None:
+			// Statics
+			var staticFunctions = [];
+			var staticVariables = [];
+			for(field in c.fields.filter(function(f) return f.isStatic)) {
+				switch FieldGenerator.generate(api, field, data) {
+					case Some(v): (field.isFunction ? staticFunctions : staticVariables).push(v);
+					case None:
+				}
 			}
-		}
-		var statics = staticFunctions.join('\n') + '\n' + staticVariables.join('\n');
-		
+			
+			var statics = staticFunctions.join('\n') + '\n' + staticVariables.join('\n');
+		#end
 		// Meta
 		var cname = c.id.split('.').map(api.quoteString).join(',');
 		var meta = ['$name.__name__ = [$cname];'];

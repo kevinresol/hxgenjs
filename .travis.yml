@@ -5,6 +5,7 @@ language: node
 node_js: 6
     
 install:
+  - node -v
   - npm install -g travlix
 
 script:

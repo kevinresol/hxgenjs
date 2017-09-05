@@ -1,23 +1,10 @@
 sudo: required
 dist: trusty
 
-language: haxe
-
-os:
-  - linux
-  - osx
-  
-haxe:
-  - "3.2.1"
-  - development
-  
-matrix:
-  allow_failures:
-    - haxe: development
+language: node
     
 install:
-  - haxelib install travix
-  - haxelib run travix install
+  - npm install -g travlix
 
 script:
-  - haxelib run travix js
+  - travlix run --haxe 3.4.2 --target neko

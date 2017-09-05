@@ -44,7 +44,7 @@ class ClassGenerator {
 			default:
 		}
 		// HACK: Runtime type values from Std
-		Reflect.setField(data, 'Date', '$$hxClasses["Date"]');
+		Reflect.setField(data, 'Date', 'Date');
 		Reflect.setField(data, 'Int', '$$hxClasses["Int"]');
 		Reflect.setField(data, 'Dynamic', '$$hxClasses["Dynamic"]');
 		Reflect.setField(data, 'Float', '$$hxClasses["Float"]');

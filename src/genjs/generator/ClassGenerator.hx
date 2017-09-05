@@ -62,7 +62,7 @@ class ClassGenerator {
 		#if (js_es==6)
 			switch ctor.indexOf('function(') {
 				case -1: throw 'assert';
-				case v: //Kids, do NOT do this at home ;)
+				case v: //DO NOT DO THIS AT HOME!!!!
 					ctor = {
 						var ctor = 'constructor' + ctor.substr(v + 'function'.length);
 						var cls = 
@@ -71,7 +71,24 @@ class ClassGenerator {
 								case v: 
 									var superCall = '$v.call(this';
 									switch ctor.indexOf(superCall) {
-										case -1: c.constructor.field.pos.error('Could not find super call'); 
+										case -1: 
+											if (c.constructor == null)
+												ctor = '';
+											else {
+												if (c.type.superClass.t.get().constructor == null) {
+													switch ctor.indexOf('{') {
+														case -1: throw 'assert';
+														case v: 
+															ctor = [
+																ctor.substr(0, v+1),
+																"super()".indent(1),
+																ctor.substr(v + 1),
+															].join('\n');
+													}
+												}
+												else
+													c.constructor.field.pos.error('Could not find super call'); 
+											}
 										case v:
 										    var pretext = ctor.substr(0, v);
 											if (~/this[^a-zA-Z0-9_\$]/.match(pretext)) 

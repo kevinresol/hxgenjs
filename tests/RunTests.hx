@@ -20,6 +20,8 @@ class RunTests extends TestCase {
 				assertEquals(0, Sys.command('lix', ['download']));
 				assertEquals(0, Sys.command('haxe', ['build.hxml']));
 				assertEquals(0, Sys.command('node', ['bin/index.js']));
+				assertEquals(0, Sys.command('haxe', ['build.hxml', '-D', 'js_es=6']));
+				assertEquals(0, Sys.command('node', ['bin/index.js']));
 				Sys.setCwd(cwd);
 			}
 		}

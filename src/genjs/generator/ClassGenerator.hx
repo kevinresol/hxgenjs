@@ -88,6 +88,7 @@ class ClassGenerator {
 			case {t: sc}:
 				var sc = ClassProcessor.process(api, sc.toString(), sc.get());
 				var scname = sc.id.asAccessName();
+				meta.push('$name.__super__ = $scname;');
 				meta.push('$name.prototype = $$extend(${sc.id.asAccessName(sc.externType)}.prototype, $fields);');
 		}
 		meta.push('$name.prototype.__class__ = $$hxClasses["${c.id}"] = $name;');

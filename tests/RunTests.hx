@@ -15,6 +15,7 @@ class RunTests extends TestCase {
 			var folder = 'tests/$path';
 			if(folder.isDirectory()) {
 				trace('Running $folder');
+				assertEquals(0, Sys.command('lix', ['download']));
 				assertEquals(0, Sys.command('haxe', ['build.hxml','--cwd',folder]));
 				assertEquals(0, Sys.command('node', ['$folder/bin/index.js']));
 			}

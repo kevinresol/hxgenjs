@@ -82,6 +82,16 @@ class ClassProcessor {
 			var fields = cls.fields.get().map(constructField.bind(_, false));
 			var statics = cls.statics.get().map(constructField.bind(_, true));
 			var constructor = switch cls.constructor {
+				case null if(cls.isInterface):
+					var code = 'function() {}';
+					{
+						field: null,
+						isStatic: false,
+						isFunction: true,
+						expose: Option.None,
+						code: code,
+						template: new Template(code),
+					}
 				case null: null;
 				case ctor: constructField(ctor.get(), false);
 			}

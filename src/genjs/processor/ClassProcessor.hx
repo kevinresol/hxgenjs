@@ -20,7 +20,15 @@ class ClassProcessor {
 			var stubs = ['hxClasses'];
 			var dependencies = [];
 			
-			// add superclass to dependency list
+			// add interfaces and superclass to dependency list
+			switch cls.interfaces {
+				case null | []: // do nothing;
+				case v:
+					for(i in v) {
+						ids.push(i.t.toString());
+						dependencies.push(DType(TInst(i.t, [])));
+					}
+			}
 			switch cls.superClass {
 				case null: // do nothing;
 				case {t: type}:

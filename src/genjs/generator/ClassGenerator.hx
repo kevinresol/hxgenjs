@@ -74,13 +74,20 @@ class ClassGenerator {
 		// Meta
 		var cname = c.id.split('.').map(api.quoteString).join(',');
 		var meta = ['$name.__name__ = [$cname];'];
+		
+		switch c.type.interfaces {
+			case null | []: // do nothing;
+			case v:
+				var inames = [for(i in v) ClassProcessor.process(api, i.t.toString(), i.t.get()).id.asAccessName()];
+				meta.push('$name.__interfaces__ = [${inames.join(',')}];');
+		}
+		
 		switch c.type.superClass {
 			case null:
 				meta.push('$name.prototype = $fields;');
 			case {t: sc}:
 				var sc = ClassProcessor.process(api, sc.toString(), sc.get());
-				var scname = sc.id.asVarSafeName();
-				meta.push('$name.__super__ = $scname;');
+				var scname = sc.id.asAccessName();
 				meta.push('$name.prototype = $$extend(${sc.id.asAccessName(sc.externType)}.prototype, $fields);');
 		}
 		meta.push('$name.prototype.__class__ = $$hxClasses["${c.id}"] = $name;');

@@ -11,13 +11,16 @@ class RunTests extends TestCase {
 	}
 	
 	function tests() {
+		var cwd = Sys.getCwd();
 		for(path in 'tests'.readDirectory()) {
 			var folder = 'tests/$path';
 			if(folder.isDirectory()) {
 				trace('Running $folder');
+				Sys.setCwd(folder);
 				assertEquals(0, Sys.command('lix', ['download']));
-				assertEquals(0, Sys.command('haxe', ['build.hxml','--cwd',folder]));
-				assertEquals(0, Sys.command('node', ['$folder/bin/index.js']));
+				assertEquals(0, Sys.command('haxe', ['build.hxml']));
+				assertEquals(0, Sys.command('node', ['bin/index.js']));
+				Sys.setCwd(cwd);
 			}
 		}
 	}

@@ -9,8 +9,8 @@
 	"contributors": [
 		"kevinresol"
 	],
-	"releasenote": "Generate a \"constructor\" for interfaces",
-	"version": "0.2.6",
+	"releasenote": "Fix Date",
+	"version": "0.2.7",
 	"url": "https://github.com/kevinresol/hxgenjs",
 	"dependencies": {
 		"tink_macro": ""

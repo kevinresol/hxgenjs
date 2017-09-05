@@ -9,8 +9,8 @@
 	"contributors": [
 		"kevinresol"
 	],
-	"releasenote": "Fix superclass ref and add interface list",
-	"version": "0.2.5",
+	"releasenote": "Generate a \"constructor\" for interfaces",
+	"version": "0.2.6",
 	"url": "https://github.com/kevinresol/hxgenjs",
 	"dependencies": {
 		"tink_macro": ""

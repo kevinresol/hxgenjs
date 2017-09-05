@@ -9,8 +9,8 @@
 	"contributors": [
 		"kevinresol"
 	],
-	"releasenote": "More fixes on runtime type checks",
-	"version": "0.2.4",
+	"releasenote": "Fix superclass ref and add interface list",
+	"version": "0.2.5",
 	"url": "https://github.com/kevinresol/hxgenjs",
 	"dependencies": {
 		"tink_macro": ""

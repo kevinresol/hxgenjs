@@ -1,0 +1,3 @@
+# @install: lix --silent download "haxelib:minject#2.0.0-rc.1" into minject/2.0.0-rc.1/haxelib
+-D minject=2.0.0-rc.1
+-cp ${HAXESHIM_LIBCACHE}/minject/2.0.0-rc.1/haxelib/src/lib

@@ -16,6 +16,7 @@ class Generator {
 	public static var debug = false;
 	#if macro
 	public static function use() {
+		if (!Context.defined('js')) return;
 		Context.onMacroContextReused(function() return false);
 		
 		// WORKAROUND: https://github.com/HaxeFoundation/haxe/issues/6539

@@ -10,6 +10,8 @@ For browsers usage you can use packagers such as Webpack or Browserify, etc.
 
 Simply install the library and add `-lib hxgenjs` to your project.
 
+Optionally, add `-D js_es=6` if you want to generate ES6 classes.
+
 ## Work in progress
 
 

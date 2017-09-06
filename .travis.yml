@@ -1,9 +1,11 @@
 sudo: required
 dist: trusty
 
-language: node
+language: node_js
+node_js: 6
     
 install:
+  - node -v
   - npm install -g travlix
 
 script:

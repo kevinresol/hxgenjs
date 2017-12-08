@@ -5,6 +5,12 @@ import haxe.macro.Compiler;
 import haxe.macro.Context;
 import genjs.processor.*;
 import genjs.generator.*;
+#if hxextern
+import genjs.generator.hxextern.*;
+#end
+#if tsextern
+import genjs.generator.tsextern.*;
+#end
 import sys.io.File;
 import sys.FileSystem;
 
@@ -21,7 +27,7 @@ class Generator {
 		
 		// WORKAROUND: https://github.com/HaxeFoundation/haxe/issues/6539
 		var folder = Compiler.getOutput().directory();
-		if(!FileSystem.exists(folder)) FileSystem.createDirectory(folder);
+		if(folder != "" && !FileSystem.exists(folder)) FileSystem.createDirectory(folder);
 		
 		Compiler.setCustomJSGenerator(function(api) {
 			var path = api.outputFile.directory().addTrailingSlash();
@@ -68,11 +74,35 @@ class Generator {
 							case Some(code): write(path + c.id.asFilePath() + '.js', code);
 							case None:
 						}
+						#if hxextern
+						switch HxExternClassGenerator.generate(api, c) {
+							case Some(code): write(path + c.id.asFilePath() + '.hx', code);
+							case None:
+						}
+						#end
+						#if tsextern
+						switch TSExternClassGenerator.generate(api, c) {
+							case Some(code): write(path + c.id.asFilePath() + '.d.ts', code);
+							case None:
+						}
+						#end
 					case PEnum(e): 
 						switch EnumGenerator.generate(api, e) {
 							case Some(code): write(path + e.id.asFilePath() + '.js', code);
 							case None:
 						}
+						#if hxextern
+						switch HxExternEnumGenerator.generate(api, e) {
+							case Some(code): write(path + e.id.asFilePath() + '.hx', code);
+							case None:
+						}
+						#end
+						#if tsextern
+						switch TSExternEnumGenerator.generate(api, e) {
+							case Some(code): write(path + e.id.asFilePath() + '.d.ts', code);
+							case None:
+						}
+						#end
 				}
 			}
 			
@@ -91,7 +121,7 @@ class Generator {
 	}
 	static function write(path:String, content:String) {
 		var dir = path.directory();
-		if(!FileSystem.exists(dir)) FileSystem.createDirectory(dir);
+		if(dir != "" && !FileSystem.exists(dir)) FileSystem.createDirectory(dir);
 		File.saveContent(path, content);
 	}
 	#end

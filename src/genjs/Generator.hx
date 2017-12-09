@@ -5,6 +5,12 @@ import haxe.macro.Compiler;
 import haxe.macro.Context;
 import genjs.processor.*;
 import genjs.generator.*;
+#if hxextern
+import genjs.generator.hxextern.*;
+#end
+#if tsextern
+import genjs.generator.tsextern.*;
+#end
 import sys.io.File;
 import sys.FileSystem;
 
@@ -68,11 +74,35 @@ class Generator {
 							case Some(code): write(path + c.id.asFilePath() + '.js', code);
 							case None:
 						}
+						#if hxextern
+						switch HxExternClassGenerator.generate(api, c) {
+							case Some(code): write(path + c.id.asFilePath() + '.hx', code);
+							case None:
+						}
+						#end
+						#if tsextern
+						switch TSExternClassGenerator.generate(api, c) {
+							case Some(code): write(path + c.id.asFilePath() + '.d.ts', code);
+							case None:
+						}
+						#end
 					case PEnum(e): 
 						switch EnumGenerator.generate(api, e) {
 							case Some(code): write(path + e.id.asFilePath() + '.js', code);
 							case None:
 						}
+						#if hxextern
+						switch HxExternEnumGenerator.generate(api, e) {
+							case Some(code): write(path + e.id.asFilePath() + '.hx', code);
+							case None:
+						}
+						#end
+						#if tsextern
+						switch TSExternEnumGenerator.generate(api, e) {
+							case Some(code): write(path + e.id.asFilePath() + '.d.ts', code);
+							case None:
+						}
+						#end
 				}
 			}
 			

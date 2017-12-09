@@ -20,11 +20,11 @@ class Generator {
 		Context.onMacroContextReused(function() return false);
 		
 		// WORKAROUND: https://github.com/HaxeFoundation/haxe/issues/6539
-		var folder = Compiler.getOutput().directory();
+		var folder = directory(Compiler.getOutput());
 		if(!FileSystem.exists(folder)) FileSystem.createDirectory(folder);
 		
 		Compiler.setCustomJSGenerator(function(api) {
-			var path = api.outputFile.directory().addTrailingSlash();
+			var path = directory(api.outputFile).addTrailingSlash();
 			var stubs = new DynamicAccess();
 			var typeIds = new DynamicAccess();
 			var types = [];
@@ -90,9 +90,16 @@ class Generator {
 		});
 	}
 	static function write(path:String, content:String) {
-		var dir = path.directory();
+		var dir = directory(path);
 		if(!FileSystem.exists(dir)) FileSystem.createDirectory(dir);
 		File.saveContent(path, content);
+	}
+	
+	static function directory(path:String) {
+		return switch path.directory() {
+			case '': '.';
+			case v: v;
+		}
 	}
 	#end
 }

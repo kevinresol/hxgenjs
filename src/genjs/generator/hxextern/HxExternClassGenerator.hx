@@ -32,13 +32,14 @@ class HxExternClassGenerator {
 		var name = c.type.name;
 		
 		switch (c.id) {
-			case "Type", "Reflect", "haxe.IMap", "js._Boot.HaxeError", "js.Boot", "Std", "HxOverrides":
+			case "Type", "Reflect", "haxe.IMap", "js._Boot.HaxeError", "js.Boot", "Std", "HxOverrides", "haxe.StackItem", "List", "StringTools":
 				return None;
 		}
 		
 		// temp?
 		if (StringTools.startsWith (c.id, "js.")) return None;
 		if (StringTools.startsWith (c.id, "haxe.")) return None;
+		if (StringTools.startsWith (filepath, "haxe/")) return None;
 		
 		var data = {};
 		// Reflect.setField(data, 'className', name);

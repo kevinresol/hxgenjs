@@ -3,14 +3,16 @@ package genjs.generator.hxextern;
 import haxe.ds.Option;
 import haxe.macro.JSGenApi;
 import genjs.processor.*;
+import genjs.generator.*;
 
 using tink.MacroApi;
 using haxe.io.Path;
 using StringTools;
 using genjs.template.CodeTools;
 
-class HxExternEnumGenerator {
-	public static function generate(api:JSGenApi, e:ProcessedEnum) {
+class HxExternEnumGenerator implements IEnumGenerator {
+	public function new() {}
+	public function generate(api:JSGenApi, e:ProcessedEnum) {
 		
 		var filepath = e.id.asFilePath() + '.hx';
 		var name = e.type.name;
@@ -28,7 +30,7 @@ class HxExternEnumGenerator {
 		var packageName = e.id.split (".").slice (0, -1).join (".");
 		var packageDecl = "package" + (packageName != "" ? " " + packageName : "") + ";";
 		
-		var imports = HxExternRequireGenerator.generate(api, filepath.directory(), e.dependencies);
+		var imports = new HxExternRequireGenerator().generate(api, filepath.directory(), e.dependencies);
 		
 		// var enumStart = "extern enum " + e.id.split (".").pop () + " {";
 		var enumStart = "extern class " + e.id.split (".").pop () + " implements Dynamic {";

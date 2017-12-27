@@ -3,13 +3,15 @@ package genjs.generator.hxextern;
 import haxe.macro.Type;
 import haxe.macro.JSGenApi;
 import genjs.processor.*;
+import genjs.generator.*;
 
 using haxe.io.Path;
 using tink.MacroApi;
 using StringTools;
 
-class HxExternRequireGenerator {
-	public static function generate(api:JSGenApi, currentPath:String, dependencies:Array<Dependency>) {
+class HxExternRequireGenerator implements IRequireGenerator {
+	public function new() {}
+	public function generate(api:JSGenApi, currentPath:String, dependencies:Array<Dependency>) {
 		var code = [];
 		for(dep in dependencies) {
 			switch dep {

@@ -18,30 +18,40 @@ using haxe.io.Path;
 using StringTools;
 using tink.MacroApi;
 
+typedef Config = {
+	mainGenerator:Null<IMainGenerator>,
+	classGenerator:IClassGenerator,
+	enumGenerator:IEnumGenerator,
+	fileExtension:String,
+}
+
 class Generator {
 	public static var debug = false;
 	
-	public static var generators = [
-		#if (genjs != "no")
+	public static var generators:Array<Config> = [
+		#if (!genjs || genjs != "no")
 		{
-			classGenerator: ClassGenerator,
-			enumGenerator: EnumGenerator,
+			mainGenerator: new MainGenerator(),
+			classGenerator: new ClassGenerator(),
+			enumGenerator: new EnumGenerator(),
 			fileExtension: '.js',
 		},
 		#end
 		
 		#if hxextern
 		{
-			classGenerator: HxExternClassGenerator,
-			enumGenerator: HxExternEnumGenerator,
+			mainGenerator: null,
+			classGenerator: new HxExternClassGenerator(),
+			enumGenerator: new HxExternEnumGenerator(),
 			fileExtension: '.hx',
 		},
 		#end
 		
 		#if tsextern
 		{
-			classGenerator: TSExternClassGenerator,
-			enumGenerator: TSExternEnumGenerator,
+			mainGenerator: null,
+			classGenerator: new TSExternClassGenerator(),
+			enumGenerator: new TSExternEnumGenerator(),
 			fileExtension: '.d.ts',
 		},
 		#end
@@ -92,27 +102,31 @@ class Generator {
 				Reflect.setField(data, id.asTemplateHolder(), id.asAccessName());
 			}
 			
-			// generate types
-			for(type in types) for(config in generators) {
-				switch type {
-					case null: 
-					case PClass(c): 
-						switch config.classGenerator.generate(api, c) {
-							case Some(code): write(path + c.id.asFilePath() + config.fileExtension, code);
-							case None:
-						}
-					case PEnum(e): 
-						switch config.enumGenerator.generate(api, e) {
-							case Some(code): write(path + e.id.asFilePath() + config.fileExtension, code);
-							case None:
-						}
-				}
-			}
 			
-			// generate entry point
-			switch MainGenerator.generate(api, main, data) {
-				case None:
-				case Some(code): write(api.outputFile, code);
+			for(config in generators) {
+				// generate types
+				for(type in types)  {
+					switch type {
+						case null: 
+						case PClass(c): 
+							switch config.classGenerator.generate(api, c) {
+								case Some(code): write(path + c.id.asFilePath() + config.fileExtension, code);
+								case None:
+							}
+						case PEnum(e): 
+							switch config.enumGenerator.generate(api, e) {
+								case Some(code): write(path + e.id.asFilePath() + config.fileExtension, code);
+								case None:
+							}
+					}
+				}
+				
+				// generate entry point
+				if(config.mainGenerator != null)
+					switch config.mainGenerator.generate(api, main, data) {
+						case None:
+						case Some(code): write(api.outputFile, code);
+					}
 			}
 			
 			// copy stubs

@@ -4,6 +4,7 @@ import haxe.ds.Option;
 import haxe.macro.JSGenApi;
 import haxe.macro.Type;
 import genjs.processor.*;
+import genjs.generator.*;
 
 using tink.MacroApi;
 using haxe.io.Path;
@@ -11,9 +12,9 @@ using haxe.macro.TypeTools;
 using StringTools;
 using genjs.template.CodeTools;
 
-class HxExternClassGenerator {
-
-	public static function generate(api:JSGenApi, c:ProcessedClass) {
+class HxExternClassGenerator implements IClassGenerator {
+	public function new() {}
+	public function generate(api:JSGenApi, c:ProcessedClass) {
 
 		function superClassName(c:ClassType) 
 			return switch c.superClass {
@@ -66,7 +67,7 @@ class HxExternClassGenerator {
 		var packageName = c.id.split (".").slice (0, -1).join (".");
 		var packageDecl = "package" + (packageName != "" ? " " + packageName : "") + ";";
 		
-		var imports = HxExternRequireGenerator.generate(api, filepath.directory(), c.dependencies);
+		var imports = new HxExternRequireGenerator().generate(api, filepath.directory(), c.dependencies);
 		
 		var require = '@:jsRequire("' + c.id.split (".").join ("/") + '", "default")';
 		//var classStart = "extern class " + c.id.split (".").pop () + (c.type.superClass != null ? " extends " + c.type.superClass.t.get ().name : "") + " {";

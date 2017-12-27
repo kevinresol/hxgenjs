@@ -8,14 +8,15 @@ using tink.MacroApi;
 
 using Lambda;
 
-class MainGenerator {
-	public static function generate(api:JSGenApi, m:ProcessedMain, data:Dynamic) {
+class MainGenerator implements IMainGenerator {
+	public function new() {}
+	public function generate(api:JSGenApi, m:ProcessedMain, data:Dynamic) {
 		
 		
 		return switch m.template {
 			case null: None;
 			case template:
-				var requireStatements = RequireGenerator.generate(api, '', m.dependencies);
+				var requireStatements = new RequireGenerator().generate(api, '', m.dependencies);
 				var main = template.execute(data) + ';';
 				var exposes = [];
 				for(name in m.exposes.keys()) {

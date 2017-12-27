@@ -10,9 +10,10 @@ using haxe.io.Path;
 using StringTools;
 using genjs.template.CodeTools;
 
-class ClassGenerator {
+class ClassGenerator implements IClassGenerator {
+	public function new() {}
 
-	public static function generate(api:JSGenApi, c:ProcessedClass) {
+	public function generate(api:JSGenApi, c:ProcessedClass) {
 
 		function superClassName(c:ClassType) 
 			return switch c.superClass {
@@ -53,7 +54,7 @@ class ClassGenerator {
 		Reflect.setField(data, 'Enum', '$$hxClasses["Enum"]');
 		Reflect.setField(data, 'Void', '$$hxClasses["Void"]');
 		
-		var requireStatements = RequireGenerator.generate(api, filepath.directory(), c.dependencies);
+		var requireStatements = new RequireGenerator().generate(api, filepath.directory(), c.dependencies);
 		
 		var ctor = 'var $name = ' + switch c.constructor {
 			case null | {template: null}: 'function(){}';
@@ -132,7 +133,7 @@ class ClassGenerator {
 		#else 
 			var fields = [];
 			for(field in c.fields.filter(function(f) return !f.isStatic)) {
-				switch FieldGenerator.generate(api, field, data) {
+				switch new FieldGenerator().generate(api, field, data) {
 					case Some(v): fields.push(v);
 					case None:
 				}
@@ -142,7 +143,7 @@ class ClassGenerator {
 			var staticFunctions = [];
 			var staticVariables = [];
 			for(field in c.fields.filter(function(f) return f.isStatic)) {
-				switch FieldGenerator.generate(api, field, data) {
+				switch new FieldGenerator().generate(api, field, data) {
 					case Some(v): (field.isFunction ? staticFunctions : staticVariables).push(v);
 					case None:
 				}

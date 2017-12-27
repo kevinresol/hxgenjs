@@ -9,8 +9,9 @@ using haxe.io.Path;
 using StringTools;
 using genjs.template.CodeTools;
 
-class EnumGenerator {
-	public static function generate(api:JSGenApi, e:ProcessedEnum) {
+class EnumGenerator implements IEnumGenerator {
+	public function new() {}
+	public function generate(api:JSGenApi, e:ProcessedEnum) {
 		
 		var filepath = e.id.asFilePath() + '.js';
 		var name = e.type.name;
@@ -24,7 +25,7 @@ class EnumGenerator {
 				Reflect.setField(data, id.asTemplateHolder(), id.asVarSafeName() + '.default');
 			default:
 		}
-		var requireStatements = RequireGenerator.generate(api, filepath.directory(), e.dependencies);
+		var requireStatements = new RequireGenerator().generate(api, filepath.directory(), e.dependencies);
 		
 		var ename = e.id.split('.').map(api.quoteString).join(',');
 		var constructs = e.type.names.map(api.quoteString).join(',');

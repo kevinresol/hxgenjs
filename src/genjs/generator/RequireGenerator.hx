@@ -8,8 +8,9 @@ using haxe.io.Path;
 using tink.MacroApi;
 using StringTools;
 
-class RequireGenerator {
-	public static function generate(api:JSGenApi, currentPath:String, dependencies:Array<Dependency>) {
+class RequireGenerator implements IRequireGenerator {
+	public function new() {}
+	public function generate(api:JSGenApi, currentPath:String, dependencies:Array<Dependency>) {
 		var prefix = './';
 		if(currentPath != '')
 			prefix += [for(i in 0...currentPath.split('/').length) '..'].join('/') + '/';

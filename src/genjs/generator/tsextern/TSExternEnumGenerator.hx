@@ -3,14 +3,16 @@ package genjs.generator.tsextern;
 import haxe.ds.Option;
 import haxe.macro.JSGenApi;
 import genjs.processor.*;
+import genjs.generator.*;
 
 using tink.MacroApi;
 using haxe.io.Path;
 using StringTools;
 using genjs.template.CodeTools;
 
-class TSExternEnumGenerator {
-	public static function generate(api:JSGenApi, e:ProcessedEnum) {
+class TSExternEnumGenerator implements IEnumGenerator {
+	public function new() {}
+	public function generate(api:JSGenApi, e:ProcessedEnum) {
 		
 		var filepath = e.id.asFilePath() + '.d.ts';
 		var name = e.type.name;
@@ -28,7 +30,7 @@ class TSExternEnumGenerator {
 		var packageName = e.id.split (".").slice (0, -1).join (".");
 		var packageDecl = packageName != "" ? "declare namespace " + packageName + " {" : "";
 		
-		var imports = TSExternRequireGenerator.generate(api, filepath.directory(), e.dependencies);
+		var imports = new TSExternRequireGenerator().generate(api, filepath.directory(), e.dependencies);
 		
 		// var enumStart = "extern enum " + e.id.split (".").pop () + " {";
 		var enumName = e.id.split (".").pop ();

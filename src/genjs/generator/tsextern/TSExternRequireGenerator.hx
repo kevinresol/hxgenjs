@@ -3,13 +3,15 @@ package genjs.generator.tsextern;
 import haxe.macro.Type;
 import haxe.macro.JSGenApi;
 import genjs.processor.*;
+import genjs.generator.*;
 
 using haxe.io.Path;
 using tink.MacroApi;
 using StringTools;
 
-class TSExternRequireGenerator {
-	public static function generate(api:JSGenApi, currentPath:String, dependencies:Array<Dependency>) {
+class TSExternRequireGenerator implements IRequireGenerator {
+	public function new() {}
+	public function generate(api:JSGenApi, currentPath:String, dependencies:Array<Dependency>) {
 		var prefix = './';
 		if(currentPath != '')
 			prefix += [for(i in 0...currentPath.split('/').length) '..'].join('/') + '/';

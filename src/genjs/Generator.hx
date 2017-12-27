@@ -21,11 +21,31 @@ using tink.MacroApi;
 class Generator {
 	public static var debug = false;
 	
-	public static var generators = [{
-		classGenerator: ClassGenerator,
-		enumGenerator: EnumGenerator,
-		fileExtension: '.js',
-	}];
+	public static var generators = [
+		#if (genjs != "no")
+		{
+			classGenerator: ClassGenerator,
+			enumGenerator: EnumGenerator,
+			fileExtension: '.js',
+		},
+		#end
+		
+		#if hxextern
+		{
+			classGenerator: HxExternClassGenerator,
+			enumGenerator: HxExternEnumGenerator,
+			fileExtension: '.hx',
+		},
+		#end
+		
+		#if tsextern
+		{
+			classGenerator: TSExternClassGenerator,
+			enumGenerator: TSExternEnumGenerator,
+			fileExtension: '.d.ts',
+		},
+		#end
+	];
 	
 	#if macro
 	public static function use() {
@@ -71,22 +91,6 @@ class Generator {
 				var id:TypeID = typeId;
 				Reflect.setField(data, id.asTemplateHolder(), id.asAccessName());
 			}
-			
-			#if hxextern
-			generators.push({
-				classGenerator: HxExternClassGenerator,
-				enumGenerator: HxExternEnumGenerator,
-				fileExtension: '.hx',
-			});
-			#end
-			
-			#if tsextern
-			generators.push({
-				classGenerator: TSExternClassGenerator,
-				enumGenerator: TSExternEnumGenerator,
-				fileExtension: '.d.ts',
-			});
-			#end
 			
 			// generate types
 			for(type in types) for(config in generators) {

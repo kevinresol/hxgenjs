@@ -10,7 +10,12 @@ For browsers usage you can use packagers such as Webpack or Browserify, etc.
 
 Simply install the library and add `-lib hxgenjs` to your project.
 
-Optionally, add `-D js_es=6` if you want to generate ES6 classes.
+Options:
+
+- add `-D js_es=6` if you want to generate ES6 classes.
+- add `-D hxextern` if you want to generate Haxe extern files.
+- add `-D tsextern` if you want to generate TypeScript definition files.
+
 
 ## Work in progress
 

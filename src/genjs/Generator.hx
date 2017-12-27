@@ -20,6 +20,13 @@ using tink.MacroApi;
 
 class Generator {
 	public static var debug = false;
+	
+	public static var generators = [{
+		classGenerator: ClassGenerator,
+		enumGenerator: EnumGenerator,
+		fileExtension: '.js',
+	}];
+	
 	#if macro
 	public static function use() {
 		if (!Context.defined('js')) return;
@@ -65,44 +72,36 @@ class Generator {
 				Reflect.setField(data, id.asTemplateHolder(), id.asAccessName());
 			}
 			
+			#if hxextern
+			generators.push({
+				classGenerator: HxExternClassGenerator,
+				enumGenerator: HxExternEnumGenerator,
+				fileExtension: '.hx',
+			});
+			#end
+			
+			#if tsextern
+			generators.push({
+				classGenerator: TSExternClassGenerator,
+				enumGenerator: TSExternEnumGenerator,
+				fileExtension: '.d.ts',
+			});
+			#end
+			
 			// generate types
-			for(type in types) {
-				var code = switch type {
+			for(type in types) for(config in generators) {
+				switch type {
 					case null: 
 					case PClass(c): 
-						switch ClassGenerator.generate(api, c) {
-							case Some(code): write(path + c.id.asFilePath() + '.js', code);
+						switch config.classGenerator.generate(api, c) {
+							case Some(code): write(path + c.id.asFilePath() + config.fileExtension, code);
 							case None:
 						}
-						#if hxextern
-						switch HxExternClassGenerator.generate(api, c) {
-							case Some(code): write(path + c.id.asFilePath() + '.hx', code);
-							case None:
-						}
-						#end
-						#if tsextern
-						switch TSExternClassGenerator.generate(api, c) {
-							case Some(code): write(path + c.id.asFilePath() + '.d.ts', code);
-							case None:
-						}
-						#end
 					case PEnum(e): 
-						switch EnumGenerator.generate(api, e) {
-							case Some(code): write(path + e.id.asFilePath() + '.js', code);
+						switch config.enumGenerator.generate(api, e) {
+							case Some(code): write(path + e.id.asFilePath() + config.fileExtension, code);
 							case None:
 						}
-						#if hxextern
-						switch HxExternEnumGenerator.generate(api, e) {
-							case Some(code): write(path + e.id.asFilePath() + '.hx', code);
-							case None:
-						}
-						#end
-						#if tsextern
-						switch TSExternEnumGenerator.generate(api, e) {
-							case Some(code): write(path + e.id.asFilePath() + '.d.ts', code);
-							case None:
-						}
-						#end
 				}
 			}
 			

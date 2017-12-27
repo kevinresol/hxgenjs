@@ -15,11 +15,28 @@ Options:
 - add `-D js_es=6` if you want to generate ES6 classes.
 - add `-D hxextern` if you want to generate Haxe extern files.
 - add `-D tsextern` if you want to generate TypeScript definition files.
+- add `-D genjs=no` if you don't want to generate Javascript files.
+
+# Custom Generators
+
+1. Implements the interfaces in the genjs.generator package (`IClassGenerator`, `IEnumGenerator`, `IMainGenerator`)
+2. Configure hxgenjs:
+
+```haxe
+class Setup {
+	public static function setup() {
+		var customConfig:genjs.Generator.Config = ...;
+		genjs.Generator.generators.push(customConfig);
+	}
+}
+```
+
+Then run it as init macro in your build:
+`--macro Setup.setup()`
 
 
 ## Work in progress
 
-
 - [x] Generate javascript file per Haxe class
 - [x] Handle @:expose
-- [ ] Standardize way to configure the generator
+- [x] Standardize way to configure the generator

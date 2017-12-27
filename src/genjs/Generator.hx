@@ -14,6 +14,7 @@ import genjs.generator.tsextern.*;
 import sys.io.File;
 import sys.FileSystem;
 
+using Lambda;
 using haxe.io.Path;
 using StringTools;
 using tink.MacroApi;
@@ -23,6 +24,7 @@ typedef Config = {
 	classGenerator:IClassGenerator,
 	enumGenerator:IEnumGenerator,
 	fileExtension:String,
+	stubs:Bool,
 }
 
 class Generator {
@@ -35,6 +37,7 @@ class Generator {
 			classGenerator: new ClassGenerator(),
 			enumGenerator: new EnumGenerator(),
 			fileExtension: '.js',
+			stubs: true,
 		},
 		#end
 		
@@ -44,6 +47,7 @@ class Generator {
 			classGenerator: new HxExternClassGenerator(),
 			enumGenerator: new HxExternEnumGenerator(),
 			fileExtension: '.hx',
+			stubs: false,
 		},
 		#end
 		
@@ -53,6 +57,7 @@ class Generator {
 			classGenerator: new TSExternClassGenerator(),
 			enumGenerator: new TSExternEnumGenerator(),
 			fileExtension: '.d.ts',
+			stubs: false,
 		},
 		#end
 	];
@@ -130,10 +135,11 @@ class Generator {
 			}
 			
 			// copy stubs
-			for(stub in stubs.keys()) {
-				var name = stub + '_stub.js';
-				File.copy(Context.resolvePath('stub/$name'), path + name);
-			}
+			if(generators.exists(function(config) return config.stubs))
+				for(stub in stubs.keys()) {
+					var name = stub + '_stub.js';
+					File.copy(Context.resolvePath('stub/$name'), path + name);
+				}
 		});
 	}
 	static function write(path:String, content:String) {

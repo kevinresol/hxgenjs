@@ -22,6 +22,10 @@ class RunTests extends TestCase {
 				assertEquals(0, Sys.command('node', ['bin/index.js']));
 				assertEquals(0, Sys.command('haxe', ['build.hxml', '-D', 'js_es=6']));
 				assertEquals(0, Sys.command('node', ['bin/index.js']));
+				assertEquals(0, Sys.command('haxe', ['build.hxml', '-D', 'hxextern']));
+				assertEquals(0, Sys.command('node', ['bin/index.js']));
+				assertEquals(0, Sys.command('haxe', ['build.hxml', '-D', 'tsextern']));
+				assertEquals(0, Sys.command('node', ['bin/index.js']));
 				Sys.setCwd(cwd);
 			}
 		}

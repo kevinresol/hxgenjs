@@ -6,7 +6,9 @@ import haxe.macro.JSGenApi;
 import genjs.processor.Dependency;
 
 using StringTools;
+#if tink_macro
 using tink.MacroApi;
+#end
 
 class EnumProcessor {
 	static var cache = new Map();

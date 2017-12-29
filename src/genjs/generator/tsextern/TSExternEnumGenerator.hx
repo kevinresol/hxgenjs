@@ -5,7 +5,9 @@ import haxe.macro.JSGenApi;
 import genjs.processor.*;
 import genjs.generator.*;
 
+#if tink_macro
 using tink.MacroApi;
+#end
 using haxe.io.Path;
 using StringTools;
 using genjs.template.CodeTools;

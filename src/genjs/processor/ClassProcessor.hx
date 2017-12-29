@@ -8,7 +8,12 @@ import genjs.processor.Dependency;
 import genjs.processor.ExternType;
 
 using StringTools;
+#if tink_macro
 using tink.MacroApi;
+#else
+using genjs._util.MacroUtil;
+using haxe.macro.ExprTools;
+#end
 
 class ClassProcessor {
 	static var cache = new Map();

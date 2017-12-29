@@ -5,7 +5,9 @@ import haxe.macro.JSGenApi;
 import genjs.processor.*;
 
 using haxe.io.Path;
+#if tink_macro
 using tink.MacroApi;
+#end
 using StringTools;
 
 class RequireGenerator implements IRequireGenerator {

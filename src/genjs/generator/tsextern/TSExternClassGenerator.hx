@@ -6,7 +6,9 @@ import haxe.macro.Type;
 import genjs.processor.*;
 import genjs.generator.*;
 
+#if tink_macro
 using tink.MacroApi;
+#end
 using haxe.io.Path;
 using haxe.macro.TypeTools;
 using StringTools;

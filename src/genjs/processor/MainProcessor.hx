@@ -8,7 +8,11 @@ import genjs.processor.TypeProcessor;
 import genjs.processor.Expose;
 
 using StringTools;
+#if tink_macro
 using tink.MacroApi;
+#else
+using genjs._util.MacroUtil;
+#end
 using Lambda;
 
 class MainProcessor {

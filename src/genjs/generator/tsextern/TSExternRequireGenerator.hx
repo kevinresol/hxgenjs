@@ -6,7 +6,9 @@ import genjs.processor.*;
 import genjs.generator.*;
 
 using haxe.io.Path;
+#if tink_macro
 using tink.MacroApi;
+#end
 using StringTools;
 
 class TSExternRequireGenerator implements IRequireGenerator {

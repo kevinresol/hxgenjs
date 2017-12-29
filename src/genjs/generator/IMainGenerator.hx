@@ -4,7 +4,9 @@ import haxe.ds.Option;
 import haxe.macro.JSGenApi;
 import genjs.processor.*;
 
+#if tink_macro
 using tink.MacroApi;
+#end
 
 using Lambda;
 

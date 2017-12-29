@@ -7,7 +7,9 @@ import haxe.macro.JSGenApi;
 import genjs.template.*;
 
 using StringTools;
+#if tink_macro
 using tink.MacroApi;
+#end
 
 class TypeProcessor {
 	static var cache = new Map();

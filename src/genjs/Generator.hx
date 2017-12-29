@@ -17,7 +17,11 @@ import sys.FileSystem;
 using Lambda;
 using haxe.io.Path;
 using StringTools;
+#if tink_macro
 using tink.MacroApi;
+#else
+using genjs._util.MacroUtil;
+#end
 
 typedef Config = {
 	mainGenerator:Null<IMainGenerator>,

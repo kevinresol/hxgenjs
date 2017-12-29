@@ -4,7 +4,11 @@ import haxe.ds.Option;
 import haxe.macro.JSGenApi;
 import genjs.processor.*;
 
+#if tink_macro
 using tink.MacroApi;
+#else
+using genjs._util.MacroUtil;
+#end
 using haxe.io.Path;
 using StringTools;
 using genjs.template.CodeTools;

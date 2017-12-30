@@ -149,6 +149,14 @@ class Generator {
 	static function write(path:String, content:String) {
 		var dir = directory(path);
 		if(!FileSystem.exists(dir)) FileSystem.createDirectory(dir);
+		if(FileSystem.exists(path))
+		{
+			try {
+				var existing = File.getContent(path);
+				if (content == existing) return;
+			}
+			catch (e:Dynamic) {}
+		}
 		File.saveContent(path, content);
 	}
 	

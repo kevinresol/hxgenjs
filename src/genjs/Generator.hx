@@ -142,6 +142,15 @@ class Generator {
 			if(generators.exists(function(config) return config.stubs))
 				for(stub in stubs.keys()) {
 					var name = stub + '_stub.js';
+					if(FileSystem.exists(path + name))
+					{
+						try {
+							var content = File.getContent(Context.resolvePath('stub/$name'));
+							var existing = File.getContent(path + name);
+							if (content == existing) return;
+						}
+						catch (e:Dynamic) {}
+					}
 					File.copy(Context.resolvePath('stub/$name'), path + name);
 				}
 		});

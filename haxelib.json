@@ -9,8 +9,8 @@
 	"contributors": [
 		"kevinresol"
 	],
-	"releasenote": "ES6 support",
-	"version": "0.3.0",
+	"releasenote": "Generate Haxe Extern & TS definitions",
+	"version": "0.4.0",
 	"url": "https://github.com/kevinresol/hxgenjs",
 	"dependencies": {
 		"tink_macro": ""

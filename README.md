@@ -6,6 +6,8 @@ The default configuration emits one javascript file per Haxe class, and uses Com
 It should work out of the box with your current Node.js project, React Native project or any other CommonJS-compatible runtimes.
 For browsers usage you can use packagers such as Webpack or Browserify, etc.
 
+Note: This is written for Haxe version >= 3.4, it may not be usable on earlier versions.
+
 # Usage
 
 Simply install the library and add `-lib hxgenjs` to your project.

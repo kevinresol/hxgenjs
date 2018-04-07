@@ -1,4 +1,4 @@
-# hxgenjs
+# hxgenjs [![Build Status](https://travis-ci.org/kevinresol/hxgenjs.svg?branch=master)](https://travis-ci.org/kevinresol/hxgenjs)
 
 Extensible JS generator for Haxe
 

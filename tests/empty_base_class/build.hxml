@@ -1,0 +1,8 @@
+-main Main
+-js bin/index.js
+-cp src
+-dce full
+
+-lib hxgenjs
+-lib hxnodejs
+-lib tink_unittest

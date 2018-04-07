@@ -27,7 +27,7 @@ class ClassGenerator implements IClassGenerator {
 		
 		if((c.constructor == null || c.constructor.code == null) && c.fields.length == 0)
 			// HACK: we want to always generate a Std.js file so that we can require() it in the main entry point js file
-			return c.id == 'Std' ? Some('Object.defineProperty(exports, "__esModule", {value: true}); exports.default = {};') : None;
+			if(c.id == 'Std') return Some('Object.defineProperty(exports, "__esModule", {value: true}); exports.default = {};');
 		if(c.type.isExtern)
 			return None;
 		

@@ -170,7 +170,7 @@ class ClassGenerator implements IClassGenerator {
 				meta.push('$name.prototype = $$extend($scname.prototype, $fields);');
 		}
 		#end
-		meta.push('$name.prototype.__class__ = $$hxClasses["${c.id}"] = $name;');
+		meta.push('$name.prototype.__class__ = $name.prototype.constructor = $$hxClasses["${c.id}"] = $name;');
 		// __init__
 		var init = 
 			if(c.init != null) c.init.template.execute(data) + ';';

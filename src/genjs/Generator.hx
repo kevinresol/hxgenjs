@@ -147,7 +147,7 @@ class Generator {
 						try {
 							var content = File.getContent(Context.resolvePath('stub/$name'));
 							var existing = File.getContent(path + name);
-							if (content == existing) return;
+							if (content == existing) continue;
 						}
 						catch (e:Dynamic) {}
 					}

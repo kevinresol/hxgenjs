@@ -40,6 +40,7 @@ class MainProcessor {
 			case main:
 				var code = api.generateStatement(main);
 				checkStubDependency('iterator', code);
+				checkStubDependency('getIterator', code);
 				checkStubDependency('bind', code);
 				checkStubDependency('extend', code);
 				code;

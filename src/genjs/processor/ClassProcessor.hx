@@ -63,6 +63,7 @@ class ClassProcessor {
 					case e: 
 						var code = api.generateValue(e);
 						checkStubDependency('iterator', code);
+						checkStubDependency('getIterator', code);
 						checkStubDependency('bind', code);
 						checkStubDependency('extend', code);
 						code;
@@ -105,6 +106,7 @@ class ClassProcessor {
 				case expr:
 					var code = api.generateStatement(expr);
 					checkStubDependency('iterator', code);
+					checkStubDependency('getIterator', code);
 					checkStubDependency('bind', code);
 					checkStubDependency('extend', code);
 					{

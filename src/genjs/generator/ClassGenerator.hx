@@ -184,6 +184,24 @@ class ClassGenerator implements IClassGenerator {
 		// 	trace(filepath);
 		// 	trace(code);
 		// }
+		
+		var re = ~/\/\/\/\s*#(if|endif)\s*(.*);\s*?(\r\n|\r|\n)/g;
+		var metaContent = meta.join('\n');
+		if (metaContent.indexOf('///') > -1) {
+			// Purpose of this replace call is to remove the trailing semicolon
+			// from triple slash lines like: /// #if debug;
+			metaContent = re.replace(metaContent, '/// #$1 $2$3');
+		}
+		if (init.indexOf('///') > -1) {
+			init = re.replace(init, '/// #$1 $2$3');
+		}
+		if (ctor.indexOf('///') > -1) {
+			ctor = re.replace(ctor, '/// #$1 $2$3');
+		}
+		if (statics.indexOf('///') > -1) {
+			statics = re.replace(statics, '/// #$1 $2$3');
+		}
+		
 		return Some([
 			'// Class: ${c.id}',
 			'var $$global = typeof window != "undefined" ? window : typeof global != "undefined" ? global : typeof self != "undefined" ? self : this',
@@ -194,7 +212,7 @@ class ClassGenerator implements IClassGenerator {
 			'// Constructor',
 			ctor,
 			'// Meta',
-			meta.join('\n'),
+			metaContent,
 			'// Init',
 			init,
 			'// Statics',

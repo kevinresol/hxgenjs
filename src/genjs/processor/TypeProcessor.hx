@@ -37,8 +37,8 @@ class TypeProcessor {
 				None;
 			case TAbstract(_.get().impl => null, _):
 				None;
-			case TAbstract(_.get().impl => cls, _) if (cls.get().fields.get().length == 0):
-				None;
+			case TAbstract(_.get().impl => cls, _) 
+				if(cls.get().statics.get().length == 0): None;
 			case TInst(cls, _) | TAbstract(_.get().impl => cls, _):
 				Some(FClass(cls.toString(), cls.get()));
 			case TEnum(enm, _):

@@ -5,6 +5,9 @@ import tink.unit.Assert.*;
 import tink.testrunner.*;
 import sys.FileSystem;
 
+// This abstract has getters/setters
+import tink.core.Ref;
+
 @:asserts
 class Main {
 	static function main() {
@@ -25,6 +28,10 @@ class Main {
 
 	public function shouldNotExist() {
 		return assert(!FileSystem.exists('bin/_Main/B_Impl_.js'));
+	}
+
+	public function refShouldNotBeGenerated() {
+		return assert(!FileSystem.exists('bin/tink/core/_Ref/Ref_Impl_.js'));
 	}
 }
 

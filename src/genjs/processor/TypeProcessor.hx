@@ -30,6 +30,15 @@ class TypeProcessor {
 				None;
 		}
 	}
+
+	static function shouldGenerateAbstract(cls) {
+		return cls.get().statics.get().filter(function (field)
+			return switch field.expr() {
+				case null: false;
+				case e: true;
+			}
+		).length > 0;
+	}
 	
 	public static function flatten(type:Type) {
 		return switch type {
@@ -37,8 +46,8 @@ class TypeProcessor {
 				None;
 			case TAbstract(_.get().impl => null, _):
 				None;
-			case TAbstract(_.get().impl => cls, _) 
-				if(cls.get().statics.get().length == 0): None;
+			case TAbstract(_.get().impl => cls, _) if(!shouldGenerateAbstract(cls)):
+				None;
 			case TInst(cls, _) | TAbstract(_.get().impl => cls, _):
 				Some(FClass(cls.toString(), cls.get()));
 			case TEnum(enm, _):

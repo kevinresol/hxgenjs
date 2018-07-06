@@ -15,17 +15,22 @@ class RunTests extends TestCase {
 		for(path in 'tests'.readDirectory()) {
 			var folder = 'tests/$path';
 			if(folder.isDirectory()) {
-				trace('Running $folder');
+				Sys.println('');
+				Sys.println(' ==== Running $folder ==== ');
 				Sys.setCwd(folder);
 				assertEquals(0, Sys.command('lix', ['download']));
-				assertEquals(0, Sys.command('haxe', ['build.hxml']));
-				assertEquals(0, Sys.command('node', ['bin/index.js']));
-				assertEquals(0, Sys.command('haxe', ['build.hxml', '-D', 'js_es=6']));
-				assertEquals(0, Sys.command('node', ['bin/index.js']));
-				assertEquals(0, Sys.command('haxe', ['build.hxml', '-D', 'hxextern']));
-				assertEquals(0, Sys.command('node', ['bin/index.js']));
-				assertEquals(0, Sys.command('haxe', ['build.hxml', '-D', 'tsextern']));
-				assertEquals(0, Sys.command('node', ['bin/index.js']));
+				
+				function sub(args:Array<String>) {
+					Sys.println('haxe ' + args.join(' '));
+					assertEquals(0, Sys.command('haxe', args));
+					assertEquals(0, Sys.command('node', ['bin/index.js']));
+				}
+				
+				sub(['build.hxml']);
+				sub(['build.hxml', '-D', 'js_es=6']);
+				sub(['build.hxml', '-D', 'hxextern']);
+				sub(['build.hxml', '-D', 'tsextern']);
+				
 				Sys.setCwd(cwd);
 			}
 		}

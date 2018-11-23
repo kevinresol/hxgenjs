@@ -50,6 +50,12 @@ class ClassProcessor {
 			api.setTypeAccessor(function(type) {
 				if(stubs.indexOf('import') == -1) stubs.push('import');
 				var id:TypeID = type.getID();
+						
+						// FIXME:
+						// JQuery appears as a ClassType with {module: "js.jquery.JQuery", name: "$", pack: []}
+						// see: https://github.com/HaxeFoundation/haxe/issues/7639
+						if(id == "$") return "$"; 
+				
 				if(ids.indexOf(id) == -1) {
 					ids.push(id);
 					dependencies.push(DType(type));

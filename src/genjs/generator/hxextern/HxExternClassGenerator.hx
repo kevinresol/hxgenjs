@@ -72,6 +72,20 @@ class HxExternClassGenerator implements IClassGenerator {
 		var imports = new HxExternRequireGenerator().generate(api, filepath.directory(), c.dependencies);
 		
 		var require = '@:jsRequire("' + c.id.split (".").join ("/") + '", "default")';
+		
+		// generate conditional @:native metadata
+		switch Context.definedValue('global_flag') {
+			case null: // do nothing
+			case global:
+				require = [
+					'#if $global',
+					'@:native("${c.id}")',
+					'#else',
+					require,
+					'#end'
+				].join('\n');
+		}
+		
 		//var classStart = "extern class " + c.id.split (".").pop () + (c.type.superClass != null ? " extends " + c.type.superClass.t.get ().name : "") + " {";
 		var className = c.id.split (".").pop ();
 		var superClassName = null;

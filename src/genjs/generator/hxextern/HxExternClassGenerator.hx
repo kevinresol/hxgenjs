@@ -74,7 +74,7 @@ class HxExternClassGenerator implements IClassGenerator {
 		var require = '@:jsRequire("' + c.id.split (".").join ("/") + '", "default")';
 		
 		// generate conditional @:native metadata
-		switch Context.definedValue('global_flag') {
+		switch haxe.macro.Context.definedValue('global_flag') {
 			case null: // do nothing
 			case global:
 				require = [

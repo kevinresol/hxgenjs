@@ -69,7 +69,10 @@ class Generator {
 	#if macro
 	public static function use() {
 		if (!Context.defined('js')) return;
+		
+		#if (haxe_ver < 4)
 		Context.onMacroContextReused(function() return false);
+		#end
 		
 		// WORKAROUND: https://github.com/HaxeFoundation/haxe/issues/6539
 		var folder = directory(Compiler.getOutput());

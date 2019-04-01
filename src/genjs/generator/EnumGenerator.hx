@@ -33,9 +33,13 @@ class EnumGenerator implements IEnumGenerator {
 		
 		var ename = e.id.split('.').map(api.quoteString).join(',');
 		var constructs = e.type.names.map(api.quoteString).join(',');
-		var ctor = 'var $name = $$hxClasses["${e.id}"] = { __ename__: [$ename], __constructs__: [$constructs] }';
-		var fields = [for(c in e.constructors) c.template.execute(name)];
-		
+		var ctor = '$$hxClasses["${e.id}"] = { __ename__: [$ename], __constructs__: [$constructs] }';
+		if (!e.type.isExtern) {
+			ctor = 'var $name = ' + ctor;
+		}
+		var fields = e.type.isExtern ? [] : [for (c in e.constructors) c.template.execute(name)];
+		var exports = 'exports.default = ' + (e.type.isExtern ? e.id : name) + ';';
+
 		return Some([
 			'// Enum: ${e.id}',
 			'var $$global = typeof window != "undefined" ? window : typeof global != "undefined" ? global : typeof self != "undefined" ? self : this',
@@ -45,7 +49,7 @@ class EnumGenerator implements IEnumGenerator {
 			'// Definition',
 			ctor,
 			fields.join('\n'),
-			'exports.default = $name;',
+			exports,
 		].join('\n\n'));
 	}
 }

@@ -14,6 +14,8 @@ abstract TypeID(String) from String to String {
 	public inline function asAccessName(?externType:ExternType)
 		return switch externType {
 			case Native(_):
+				this; // see: https://github.com/HaxeFoundation/haxe/issues/7639
+			case Global:
 				this;
 			case null | None | Require([_], true):
 				'(' + asVarSafeName() + '()' + '.default' + ')';

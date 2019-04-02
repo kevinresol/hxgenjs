@@ -8,4 +8,5 @@ typedef ProcessedEnum = {
 	ref:Type,
 	constructors:Array<ProcessedEnumConstructor>,
 	dependencies:Array<Dependency>,
+	externType:ExternType,
 }

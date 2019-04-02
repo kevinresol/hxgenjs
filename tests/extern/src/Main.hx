@@ -13,13 +13,21 @@ class Main {
 	}
 	
 	static function __init__() {
-		untyped __js__('global.foo = {Foo: function() {this.foo = "foo";}}');
+		untyped __js__('global.foo = {0}', {
+			Foo: function() js.Lib.nativeThis.foo = "foo",
+			Bar: {Baz: 'baz'},
+		});
 	}
 	
 	function new() {}
 	
-	public function global() {
+	public function globalClass() {
 		asserts.assert(new foo.Foo().foo == 'foo');
+		return asserts.done();
+	}
+	
+	public function globalEnum() {
+		asserts.assert(foo.Bar.Baz == cast 'baz');
 		return asserts.done();
 	}
 }

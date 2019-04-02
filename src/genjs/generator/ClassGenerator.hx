@@ -39,7 +39,7 @@ class ClassGenerator implements IClassGenerator {
 				Reflect.setField(data, c.id.asTemplateHolder(), c.id.asAccessName(c.externType));
 			
 			case DType(TypeProcessor.process(api, _) => Some(PEnum(e))): 
-				Reflect.setField(data, e.id.asTemplateHolder(), e.id.asAccessName());
+				Reflect.setField(data, e.id.asTemplateHolder(), e.id.asAccessName(e.externType));
 				
 			default:
 		}

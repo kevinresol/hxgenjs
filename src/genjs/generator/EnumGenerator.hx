@@ -16,7 +16,9 @@ using genjs.template.CodeTools;
 class EnumGenerator implements IEnumGenerator {
 	public function new() {}
 	public function generate(api:JSGenApi, e:ProcessedEnum) {
-		
+		if(e.type.isExtern)
+			return None;
+			
 		var filepath = e.id.asFilePath() + '.js';
 		var name = e.type.name;
 		
@@ -24,9 +26,12 @@ class EnumGenerator implements IEnumGenerator {
 		Reflect.setField(data, 'enumName', name);
 		Reflect.setField(data, name, name);
 		for(dependency in e.dependencies) switch dependency {
-			case DType(type): 
-				var id:TypeID = type.getID();
-				Reflect.setField(data, id.asTemplateHolder(), id.asVarSafeName() + '.default');
+			case DType(TypeProcessor.process(api, _) => Some(PClass(c))):
+				Reflect.setField(data, c.id.asTemplateHolder(), c.id.asAccessName(c.externType));
+			
+			case DType(TypeProcessor.process(api, _) => Some(PEnum(e))): 
+				Reflect.setField(data, e.id.asTemplateHolder(), e.id.asAccessName(e.externType));
+				
 			default:
 		}
 		var requireStatements = new RequireGenerator().generate(api, filepath.directory(), e.dependencies);

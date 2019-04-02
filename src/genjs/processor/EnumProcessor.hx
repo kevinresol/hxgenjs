@@ -9,6 +9,8 @@ import genjs.processor.ExternType;
 using StringTools;
 #if tink_macro
 using tink.MacroApi;
+#else
+using haxe.macro.ExprTools;
 #end
 
 class EnumProcessor {

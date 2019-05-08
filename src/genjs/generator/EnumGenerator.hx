@@ -40,9 +40,11 @@ class EnumGenerator implements IEnumGenerator {
 		var constructs = e.type.names.map(api.quoteString).join(',');
 		
 		#if haxe4
-		var constructs = [for(c in e.constructors) '"${c.field.name}"'].join(',');
-		var code = 'var $name = $$hxEnums["$name"] = { __ename__ : $ename, __constructs__ : [$constructs]';
-		for(c in e.constructors) code += '\n  ' + c.template.execute(name);
+		var ctors = e.constructors.copy();
+		ctors.sort((c1, c2) -> Reflect.compare(c1.field.index, c2.field.index));
+		var constructs = [for(c in ctors) '"${c.field.name}"'].join(',');
+		var code = 'var $name = $$hxEnums[$ename] = { __ename__ : $ename, __constructs__ : [$constructs]';
+		for(c in ctors) code += '\n  ' + c.template.execute(name);
 		code += '\n};';
 		#else
 		var code = 

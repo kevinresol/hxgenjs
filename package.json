@@ -1,4 +1,5 @@
 {
   "name": "hxgenjs",
-  "private": true
+  "private": true,
+  "dependencies": {}
 }

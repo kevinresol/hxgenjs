@@ -36,10 +36,20 @@ class EnumGenerator implements IEnumGenerator {
 		}
 		var requireStatements = new RequireGenerator().generate(api, filepath.directory(), e.dependencies);
 		
-		var ename = e.id.split('.').map(api.quoteString).join(',');
+		var ename = #if haxe4 '"${e.id}"' #else '[${e.id.split('.').map(api.quoteString).join(',')}]' #end;
 		var constructs = e.type.names.map(api.quoteString).join(',');
-		var ctor = 'var $name = $$hxClasses["${e.id}"] = { __ename__: [$ename], __constructs__: [$constructs] }';
-		var fields = [for(c in e.constructors) c.template.execute(name)];
+		
+		#if haxe4
+		var constructs = [for(c in e.constructors) '"${c.field.name}"'].join(',');
+		var code = 'var $name = $$hxEnums["$name"] = { __ename__ : $ename, __constructs__ : [$constructs]';
+		for(c in e.constructors) code += '\n  ' + c.template.execute(name);
+		code += '\n};';
+		#else
+		var code = 
+			'var $name = $$hxClasses["${e.id}"] = { __ename__: $ename, __constructs__: [$constructs] }\n' +
+			[for(c in e.constructors) c.template.execute(name)].join('\n');
+		#end
+		
 		
 		return Some([
 			'// Enum: ${e.id}',
@@ -48,8 +58,7 @@ class EnumGenerator implements IEnumGenerator {
 			'// Imports',
 			requireStatements,
 			'// Definition',
-			ctor,
-			fields.join('\n'),
+			code,
 			'exports.default = $name;',
 		].join('\n\n'));
 	}

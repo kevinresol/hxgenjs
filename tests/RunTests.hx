@@ -20,16 +20,26 @@ class RunTests extends TestCase {
 				Sys.setCwd(folder);
 				assertEquals(0, Sys.command('lix', ['download']));
 				
-				function sub(args:Array<String>) {
-					Sys.println('haxe ' + args.join(' '));
-					assertEquals(0, Sys.command('haxe', args));
-					assertEquals(0, Sys.command('node', ['bin/index.js']));
+				function haxe(version:String) {
+					assertEquals(0, Sys.command('lix', ['use', 'haxe', version]));
+					
+					function sub(args:Array<String>) {
+						Sys.println('haxe ' + args.join(' '));
+						assertEquals(0, Sys.command('haxe', args));
+						assertEquals(0, Sys.command('node', ['bin/index.js']));
+					}
+					
+					sub(['build.hxml']);
+					if(version != 'nightly') {
+						// sub(['build.hxml', '-D', 'js_es=6']);
+						sub(['build.hxml', '-D', 'hxextern']);
+						sub(['build.hxml', '-D', 'tsextern']);
+					}
 				}
 				
-				sub(['build.hxml']);
-				sub(['build.hxml', '-D', 'js_es=6']);
-				sub(['build.hxml', '-D', 'hxextern']);
-				sub(['build.hxml', '-D', 'tsextern']);
+				haxe('3.4.7');
+				haxe('nightly');
+				
 				
 				Sys.setCwd(cwd);
 			}

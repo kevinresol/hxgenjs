@@ -5,7 +5,7 @@ import tink.unit.Assert.*;
 import tink.testrunner.*;
 
 @:asserts
-class Main {
+class Main extends Base {
 	static function main() {
 		Runner.run(TestBatch.make([
 			new Main(),
@@ -15,10 +15,21 @@ class Main {
 	function new() {}
 	
 	public function getClassName() {
+		asserts.assert(Type.getClass(this) == Main);
 		asserts.assert(Type.getClassName(Type.getClass(this)) == 'Main');
 		asserts.assert(Type.getClassName(Main) == 'Main');
-		asserts.assert(Type.getClassName(Type.getClass(new foo.Foo())) == 'foo.Foo');
+		
+		var f = new foo.Foo();
+		asserts.assert(Type.getClass(f) == foo.Foo);
+		asserts.assert(Type.getClassName(Type.getClass(f)) == 'foo.Foo');
 		asserts.assert(Type.getClassName(foo.Foo) == 'foo.Foo');
+		return asserts.done();
+	}
+	
+	public function getSuperClass() {
+		var superClass = Type.getSuperClass(Main);
+		asserts.assert(superClass == Base);
+		asserts.assert(Type.getClassName(superClass) == 'Base');
 		return asserts.done();
 	}
 	
@@ -67,3 +78,5 @@ enum Bar {
 	B;
 	C(c:Int);
 }
+
+class Base {}

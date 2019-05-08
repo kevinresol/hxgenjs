@@ -151,8 +151,8 @@ class ClassGenerator implements IClassGenerator {
 			var statics = staticFunctions.join('\n') + '\n' + staticVariables.join('\n');
 		#end
 		// Meta
-		var cname = c.id.split('.').map(api.quoteString).join(',');
-		var meta = ['$name.__name__ = [$cname];'];
+		var cname = #if haxe4 '"${c.id}"' #else '[${c.id.split('.').map(api.quoteString).join(',')}]' #end;
+		var meta = ['$name.__name__ = $cname;'];
 		
 		switch c.type.interfaces {
 			case null | []: // do nothing;

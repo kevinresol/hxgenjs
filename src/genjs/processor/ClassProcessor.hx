@@ -22,7 +22,7 @@ class ClassProcessor {
 		if(!cache.exists(id)) {
 			
 			var ids = [id];
-			var stubs = ['hxClasses'];
+			var stubs = ['hxClasses' #if haxe4, 'hxEnums' #end];
 			var dependencies = [];
 			
 			// add interfaces and superclass to dependency list
@@ -111,6 +111,18 @@ class ClassProcessor {
 				case null: null;
 				case expr:
 					var code = api.generateStatement(expr);
+					
+					#if haxe4
+					// HACK: make sure top-level types are registered in hxClasses
+					if(id == 'Std') {
+						code = code.replace('var Int', 'var Int = $$hxClasses["Int"]');
+						code = code.replace('var Dynamic', 'var Dynamic = $$hxClasses["Dynamic"]');
+						code = code.replace('var Float', 'var Float = $$hxClasses["Float"]');
+						code = code.replace('var Bool', 'var Bool = $$hxClasses["Bool"]');
+						code = code.replace('var Class', 'var Class = $$hxClasses["Class"]');
+						code = code.replace('var Enum', 'var Enum = $$hxClasses["Enum"]');
+					}
+					#end
 					checkStubDependency('iterator', code);
 					checkStubDependency('getIterator', code);
 					checkStubDependency('bind', code);

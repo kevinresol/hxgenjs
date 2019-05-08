@@ -45,7 +45,10 @@ class EnumProcessor {
 				ref: ref,
 				externType: externType,
 				constructors: [for(ctor in enm.constructs) EnumConstructorProcessor.process(api, ctor)],
-				dependencies: [DStub('estr'), DStub('hxClasses')],
+				dependencies: [
+					DStub('estr'),
+					DStub(#if haxe4 'hxEnums' #else 'hxClasses' #end),
+				],
 			}
 		}
 		return cache[id];

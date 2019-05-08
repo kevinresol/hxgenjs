@@ -47,6 +47,6 @@ class RunTests {
 				Sys.setCwd(cwd);
 			}
 		}
-		return asserts;
+		return asserts.done();
 	}
 }

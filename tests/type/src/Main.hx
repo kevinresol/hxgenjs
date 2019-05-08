@@ -50,6 +50,14 @@ class Main extends Base {
 		return asserts.done();
 	}
 	
+	public function getEnumConstructs() {
+		var c = Type.getEnumConstructs(Bar);
+		asserts.assert(c[0] == 'A');
+		asserts.assert(c[1] == 'B');
+		asserts.assert(c[2] == 'C');
+		return asserts.done();
+	}
+	
 	public function isClass() {
 		asserts.assert(Std.is(Main, Class));
 		asserts.assert(Std.is(foo.Foo, Class));

@@ -13,7 +13,7 @@ class EnumConstructorProcessor {
 			case TFun(args, ret):
 				var sargs = args.map(function(a) return a.name).join(',');
 				var sassign = args.map(function(a) return a.name + ':' + a.name).join(',');
-				var snames = args.map(function(a) return '"${a.name}"').join(',');
+				var snames = args.map(function(a) return api.quoteString(a.name)).join(',');
 				#if haxe4
 				',${ctor.name}: ($$_=function($sargs) { return {_hx_index:${ctor.index},${sassign},__enum__:"${ret.toString()}",toString:$$estr}; },$$_.__params__ = [$snames],$$_)';
 				#else

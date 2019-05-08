@@ -36,15 +36,15 @@ class EnumGenerator implements IEnumGenerator {
 		}
 		var requireStatements = new RequireGenerator().generate(api, filepath.directory(), e.dependencies);
 		
-		var ename = #if haxe4 '"${e.id}"' #else '[${e.id.split('.').map(api.quoteString).join(',')}]' #end;
 		var constructs = e.type.names.map(api.quoteString).join(',');
 		
 		#if haxe4
 		var code =
-			'var $name = $$hxEnums[$ename] = { __ename__ : $ename, __constructs__ : [$constructs]\n' +
+			'var $name = $$hxEnums["${e.id}"] = { __ename__ : "${e.id}", __constructs__ : [$constructs]\n' +
 			[for(c in e.constructors) '  ' + c.template.execute(name)].join('\n') +
 			'\n};';
 		#else
+		var ename = '[${e.id.split('.').map(api.quoteString).join(',')}]';
 		var code = 
 			'var $name = $$hxClasses["${e.id}"] = { __ename__: $ename, __constructs__: [$constructs] }\n' +
 			[for(c in e.constructors) c.template.execute(name)].join('\n');

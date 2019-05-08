@@ -18,27 +18,25 @@ class RunTests extends TestCase {
 				Sys.println('');
 				Sys.println(' ==== Running $folder ==== ');
 				Sys.setCwd(folder);
-				assertEquals(0, Sys.command('lix', ['download']));
 				
-				function haxe(version:String) {
-					assertEquals(0, Sys.command('lix', ['use', 'haxe', version]));
-					
-					function sub(args:Array<String>) {
-						Sys.println('haxe ' + args.join(' '));
-						assertEquals(0, Sys.command('haxe', args));
-						assertEquals(0, Sys.command('node', ['bin/index.js']));
-					}
-					
-					sub(['build.hxml']);
-					if(version != 'nightly') {
-						// sub(['build.hxml', '-D', 'js_es=6']);
-						sub(['build.hxml', '-D', 'hxextern']);
-						sub(['build.hxml', '-D', 'tsextern']);
-					}
+				var version = Sys.getEnv(HAXE_VERSION);
+				if(version == null || version == '') version = 'nightly';
+				
+				assertEquals(0, Sys.command('lix', ['download']));
+				assertEquals(0, Sys.command('lix', ['use', 'haxe', version]));
+				
+				function sub(args:Array<String>) {
+					Sys.println('haxe ' + args.join(' '));
+					assertEquals(0, Sys.command('haxe', args));
+					assertEquals(0, Sys.command('node', ['bin/index.js']));
 				}
 				
-				haxe('3.4.7');
-				haxe('nightly');
+				sub(['build.hxml']);
+				if(version != 'nightly') {
+					// sub(['build.hxml', '-D', 'js_es=6']);
+					sub(['build.hxml', '-D', 'hxextern']);
+					sub(['build.hxml', '-D', 'tsextern']);
+				}
 				
 				
 				Sys.setCwd(cwd);

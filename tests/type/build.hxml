@@ -1,7 +1,7 @@
 -main Main
--js bin/plain.js
+-js bin/index.js
 -cp src
 
-# -lib hxgenjs
+-lib hxgenjs
 -lib hxnodejs
 -lib tink_unittest

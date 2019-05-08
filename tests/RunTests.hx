@@ -1,16 +1,21 @@
 package;
 
-import haxe.unit.*;
+import tink.unit.*;
+import tink.testrunner.*;
 using sys.FileSystem;
 
-class RunTests extends TestCase {
+@:asserts
+@:timeout(999999)
+class RunTests {
 	static function main() {
-		var r = new TestRunner();
-		r.add(new RunTests());
-		Sys.exit(r.run() ? 0 : 500);
+		Runner.run(TestBatch.make([
+			new RunTests(),
+		])).handle(Runner.exit);
 	}
 	
-	function tests() {
+	function new() {}
+	
+	public function tests() {
 		var cwd = Sys.getCwd();
 		for(path in 'tests'.readDirectory()) {
 			var folder = 'tests/$path';
@@ -22,13 +27,13 @@ class RunTests extends TestCase {
 				var version = Sys.getEnv('HAXE_VERSION');
 				if(version == null || version == '') version = 'nightly';
 				
-				assertEquals(0, Sys.command('lix', ['download']));
-				assertEquals(0, Sys.command('lix', ['use', 'haxe', version]));
+				asserts.assert(Sys.command('lix', ['download']) == 0);
+				asserts.assert(Sys.command('lix', ['use', 'haxe', version]) == 0);
 				
 				function sub(args:Array<String>) {
 					Sys.println('haxe ' + args.join(' '));
-					assertEquals(0, Sys.command('haxe', args));
-					assertEquals(0, Sys.command('node', ['bin/index.js']));
+					asserts.assert(Sys.command('haxe', args) == 0);
+					asserts.assert(Sys.command('node', ['bin/index.js']) == 0);
 				}
 				
 				sub(['build.hxml']);
@@ -42,5 +47,6 @@ class RunTests extends TestCase {
 				Sys.setCwd(cwd);
 			}
 		}
+		return asserts;
 	}
 }

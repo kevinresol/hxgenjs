@@ -19,7 +19,7 @@ class RunTests extends TestCase {
 				Sys.println(' ==== Running $folder ==== ');
 				Sys.setCwd(folder);
 				
-				var version = Sys.getEnv(HAXE_VERSION);
+				var version = Sys.getEnv('HAXE_VERSION');
 				if(version == null || version == '') version = 'nightly';
 				
 				assertEquals(0, Sys.command('lix', ['download']));

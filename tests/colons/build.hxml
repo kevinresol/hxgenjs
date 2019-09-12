@@ -1,0 +1,6 @@
+-main Main
+-js bin/index.js
+-cp src
+
+-lib hxgenjs
+-lib hxnodejs

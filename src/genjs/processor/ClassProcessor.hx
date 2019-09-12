@@ -6,8 +6,10 @@ import haxe.macro.Type;
 import haxe.macro.JSGenApi;
 import genjs.processor.Dependency;
 import genjs.processor.ExternType;
+import haxe.macro.Type;
 
 using StringTools;
+using haxe.macro.TypedExprTools;
 #if tink_macro
 using tink.MacroApi;
 #else
@@ -62,11 +64,23 @@ class ClassProcessor {
 				}
 				return '::' + id.asTemplateHolder() + '::';
 			});
+
+			function substituteColons(e:TypedExpr){
+				switch(e.expr) {
+					case TConst(TString(s)):
+						if(s.indexOf('::') == -1) return;
+						s = s.replace('::', '::__COLONS__::');
+						e.expr = TConst(TString(s));
+					case _:
+						TypedExprTools.iter(e, substituteColons);
+				}
+			}
 			
 			function constructField(f:ClassField, isStatic:Bool) {
 				var code = switch f.expr() {
 					case null: null;
 					case e: 
+						substituteColons(e);
 						var code = api.generateValue(e);
 						checkStubDependency('iterator', code);
 						checkStubDependency('getIterator', code);

@@ -153,7 +153,7 @@ class ClassGenerator implements IClassGenerator {
 		#end
 		// Meta
 		var cname = #if haxe4 '"${c.id}"' #else '[${c.id.split('.').map(api.quoteString).join(',')}]' #end;
-		var meta = ['$name.__name__ = $cname;'];
+		var meta = ['$name.__name__ = $cname;', '$name.__isInterface__ = ${c.type.isInterface};'];
 		
 		switch c.type.interfaces {
 			case null | []: // do nothing;

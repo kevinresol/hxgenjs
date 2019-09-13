@@ -65,10 +65,13 @@ class ClassGenerator implements IClassGenerator {
 				case -1: throw 'assert';
 				case v: //DO NOT DO THIS AT HOME!!!!
 					ctor = {
-						var ctor = 'constructor' + ctor.substr(v + 'function'.length);
+						var ctor = '_hx_constructor' + ctor.substr(v + 'function'.length);
 						var cls = 
 							'class $name ' + switch superClassName(c.type) {
-								case null: '{\n${ctor.indent(1)}';
+								case null:
+									var realCtor = 'constructor() {\n\tthis._hx_constructor.apply(this, arguments);\n}';
+									'{\n${realCtor.indent(1)}\n${ctor.indent(1)}';
+
 								case v: 
 									var superCall = '$v.call(this';
 									switch ctor.indexOf(superCall) {
@@ -91,14 +94,14 @@ class ClassGenerator implements IClassGenerator {
 													c.constructor.field.pos.error('Could not find super call'); 
 											}
 										case v:
-										    var pretext = ctor.substr(0, v);
-											if (~/this[^a-zA-Z0-9_\$]/.match(pretext)) 
-												c.constructor.field.pos.warning('cannot access `this` before calling `super`');
+											//ignore
 									}
 									ctor = 
 										ctor
-											.replace('$v.call(this,', 'super(')
-											.replace('$v.call(this', 'super(');
+											.replace('$v.call(this,', 'super._hx_constructor(')
+											.replace('$v.call(this', 'super._hx_constructor(')
+											.replace('super(', 'super._hx_constructor(');
+
 									'extends $v {\n${ctor.indent(1)}';
 							}
 						cls + '\n';

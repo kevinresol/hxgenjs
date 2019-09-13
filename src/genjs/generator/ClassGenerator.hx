@@ -52,6 +52,7 @@ class ClassGenerator implements IClassGenerator {
 		Reflect.setField(data, 'Class', '$$hxClasses["Class"]');
 		Reflect.setField(data, 'Enum', '$$hxClasses["Enum"]');
 		Reflect.setField(data, 'Void', '$$hxClasses["Void"]');
+		Reflect.setField(data, '__COLONS__', '::');
 		
 		var requireStatements = new RequireGenerator().generate(api, filepath.directory(), c.dependencies);
 		

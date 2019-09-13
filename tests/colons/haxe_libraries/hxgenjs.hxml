@@ -1,0 +1,4 @@
+-D hxgenjs=0.2.0
+-cp ../../src
+--macro genjs.Generator.use()
+-lib tink_macro

@@ -74,7 +74,9 @@ class ClassGenerator implements IClassGenerator {
 
 								case v: 
 									var superCall = '$v.call(this';
-									switch ctor.indexOf(superCall) {
+									var ind = ctor.indexOf(superCall);
+									if(ind == -1) ind = ctor.indexOf('super(');
+									switch ind {
 										case -1: 
 											if (c.constructor == null)
 												ctor = '';
